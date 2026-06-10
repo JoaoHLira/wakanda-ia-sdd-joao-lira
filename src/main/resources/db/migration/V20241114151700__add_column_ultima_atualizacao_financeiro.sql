@@ -1,0 +1,1 @@
+ALTER TABLE wakander ADD COLUMN ultima_atualizacao_financeiro TIMESTAMP NOT NULL;

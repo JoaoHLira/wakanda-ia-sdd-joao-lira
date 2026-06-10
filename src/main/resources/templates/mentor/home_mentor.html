@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <title th:text="'Página Inicial - Wakanda-AI'">Página Inicial</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" th:href="@{/css/home_mentor.css}" />
+    <link
+      rel="shortcut icon"
+      href="/imagens/logoWakanda.ico"
+      type="image/x-icon"
+      th:href="@{/imagens/logoWakanda.ico}"
+    />
+  </head>
+
+  <body>
+    <div>
+      <header>
+        <div class="header-actions">
+          <div class="logout" id="sair">
+            <img
+              src="../static/imagens/sair.svg"
+              alt=""
+              th:src="@{/imagens/sair.svg}"
+            />
+            Sair
+          </div>
+        </div>
+      </header>
+
+      <section class="intro">
+        <h1>Bem-vindo à Gestão de Wakanders!</h1>
+        <p>
+          Explore as ferramentas para gerenciar e acompanhar o progresso dos
+          Wakanders. Use o menu de navegação para acessar as áreas do sistema.
+        </p>
+      </section>
+
+      <section class="sections">
+        <div class="section-item">
+          <h2>Catálogo de Missões</h2>
+          <p>
+            Explore as trilhas, jornadas e missões disponíveis para os
+            Wakanders.
+          </p>
+          <a th:href="@{/gameficacao/catalogo/missoes}" class="btn-primary"
+            >Ir para o Catálogo</a
+          >
+        </div>
+
+        <div class="section-item">
+          <h2>Gerenciamento de Wakanders</h2>
+          <p>
+            Informações sobre o total de Wakanders, cadastros completos e
+            incompletos. Também permite sincronizar dados, disparar formulários,
+            atualizar status e buscar usuários com filtros.
+          </p>
+          <a th:href="@{/painel-dados/dashboard}" class="btn-primary"
+            >Ir para o Gerenciamento</a
+          >
+        </div>
+
+        <div class="section-item">
+          <h2>Progresso Wakanders</h2>
+          <p>
+            Painel que consolida o progresso dos Wakanders, exibindo as métricas
+            e um ranking de XP para que mentores acompanhem a evolução geral e
+            identifiquem pontos de melhoria.
+          </p>
+          <a th:href="@{/gameficacao/ProgressoWakanders}" class="btn-primary"
+            >Ir para Progresso Wakanders</a
+          >
+        </div>
+
+        <div class="section-item">
+          <h2>Progresso Individual</h2>
+          <p>
+            Acompanhe o progresso detalhado de cada Wakander. Visualize nível,
+            XP, sabedorias e últimas missões.
+          </p>
+          <a th:href="@{/gameficacao/progresso}" class="btn-primary"
+            >Ir para Progresso Individual do Wakander</a
+          >
+        </div>
+      </section>
+    </div>
+
+    <script
+      src="../static/js/home_mentor.js"
+      th:src="@{/js/home_mentor.js}"
+    ></script>
+  </body>
+</html>

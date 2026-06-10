@@ -1,0 +1,93 @@
+{
+  "id": 12345678,
+  "full_name":"Teste da Silva",
+  "email":"email@email.com",
+  "sign_in_count":2,
+  "current_sign_in_at":"2025-04-29T15:41:50.100-03:00",
+  "last_seen_at":"2025-04-29T15:41:50.108-03:00",
+  "profile_image_url":"http://example.com/imagem-perfil.jpg",
+  "metadata":
+  {
+    "cpf_cnpj":"17311662060",
+    "phone_local_code":"351",
+    "phone_number":"7392213422"
+  },
+  "created_at":"2025-04-29T13:05:58.784-03:00",
+  "updated_at":"2025-04-29T16:00:47.867-03:00",
+  "bio":null,
+  "unlimited":false,
+  "blocked":false,
+  "enrollments":[
+    {
+      "id": 10000001,
+      "status":"active",
+      "course_id": 20000001,
+      "classroom_id": 30000001,
+      "expire_date":"2027-04-29"
+    },
+    {
+      "id": 10000002,
+      "status":"active",
+      "course_id": 20000002,
+      "classroom_id": 30000002,
+      "expire_date":null
+    },
+    {
+      "id": 10000003,
+      "status":"active",
+      "course_id": 20000003,
+      "classroom_id": 30000003,
+      "expire_date":null
+    },
+    {
+      "id": 10000004,
+      "status":"active",
+      "course_id": 20000004,
+      "classroom_id": 30000004,
+      "expire_date":null
+    },
+    {
+      "id": 10000005,
+      "status":"active",
+      "course_id": 20000005,
+      "classroom_id": 30000005,
+      "expire_date":null
+    },
+    {
+      "id": 10000006,
+      "status":"active",
+      "course_id": 20000006,
+      "classroom_id": 30000006,
+      "expire_date":null
+    },
+    {
+      "id": 10000007,
+      "status":"active",
+      "course_id": 20000007,
+      "classroom_id": 30000007,
+      "expire_date":null
+    },
+    {
+      "id": 10000008,
+      "status":"active",
+      "course_id": 20000008,
+      "classroom_id": 30000008,
+      "expire_date":null
+    },
+    {
+      "id": 10000009,
+      "status":"active",
+      "course_id": 20000009,
+      "classroom_id": 30000009,
+      "expire_date":"2027-04-29"
+    }
+  ],
+  "memberships":[
+    {
+      "id": 40000001,
+      "membership_level_id": 50000001,
+      "status":"active",
+      "expire_date":"2027-04-29"
+    }
+  ]
+}

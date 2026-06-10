@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Dashboard Wakanders</title>
+    <link rel="stylesheet" href="../static/css/dashboard.css" th:href="@{/css/dashboard.css}">
+    <link rel="stylesheet" href="../static/css/loading.css" th:href="@{/css/loading.css}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="/imagens/logoWakanda.ico" type="image/x-icon" th:href="@{/imagens/logoWakanda.ico}">
+</head>
+
+<body>
+
+<div class="blackscreen">
+    <div class="loader"></div>
+</div>
+
+<div id="popup-modal" class="modal-overlay">
+    <div class="popup" id="popup">
+        <div id="popup-icon" class="icon">✅</div>
+        <div id="popup-message" class="message">Sucesso!</div>
+        <button class="btn-close" onclick="closePopup()">Fechar</button>
+    </div>
+</div>
+
+<div class="modal-overlay" id="confirm-modal">
+    <div class="modal" id="confirm-modal-1">
+        <button class="modal-close" onclick="closeConfirmModal()">×</button>
+
+        <h2>Confirmação</h2>
+        <p>
+            Essa ação enviará uma mensagem com o link do formulário de preenchimento dos dados a todos os wakanders.
+            Deseja
+            continuar?
+        </p>
+        <div class="modal-actions">
+            <button class="btn-confirm" onclick="handleConfirm()">Sim</button>
+            <button class="btn-cancel" onclick="closeConfirmModal()">Não</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="asaas-confirm-modal">
+    <div class="modal" id="modal-asaas">
+        <button class="modal-close" onclick="closeAsaasModal()">×</button>
+
+        <h2>Confirmação</h2>
+        <p>
+            Essa ação enviará uma requisição para sincronizar os dados do Asaas com os cadastros dos wakanders. Deseja
+            continuar?
+        </p>
+        <div class="modal-actions">
+            <button class="btn-confirm" onclick="handleAsaasConfirm()">Sim</button>
+            <button class="btn-cancel" onclick="closeAsaasModal()">Não</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="status-confirm-modal">
+    <div class="modal" id="modal-status">
+        <button class="modal-close" onclick="closeStatusModal()">×</button>
+        <h2>Confirmação</h2>
+        <p>
+            Essa ação atualizará o status de todos os wakanders com base nos dados mais recentes. Deseja continuar?
+        </p>
+        <div class="modal-actions">
+            <button class="btn-confirm" onclick="handleStatusConfirm()">Sim</button>
+            <button class="btn-cancel" onclick="closeStatusModal()">Não</button>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal-overlay" id="modalOverlay">
+    <div class="modal" id="wakanderModal">
+        <button class="modal-close" onclick="closeModal()">×</button>
+        <h2>Detalhes do Wakander</h2>
+        <div class="modal-content">
+            <p><strong>Nome:</strong> <span id="modalNome"></span></p>
+            <p><strong>CPF:</strong> <span id="modalCpf"></span></p>
+            <p><strong>ID MemberKit:</strong> <span id="modalMemberkit"></span></p>
+            <p><strong>WhatsApp:</strong> <span id="modalWhatsapp"></span></p>
+            <p><strong>Email:</strong> <span id="modalEmail"></span></p>
+            <p><strong>Data Nascimento:</strong> <span id="modalNascimento"></span></p>
+            <p><strong>Status Financeiro:</strong> <span id="modalFinanceiro"></span></p>
+            <p><strong>ID Asaas:</strong> <span id="modalIdAsaas"></span></p>
+            <p><strong>ID Assinatura Asaas:</strong> <span id="modalAssinaturaAsaas"></span></p>
+            <p><strong>Nome Fiador:</strong> <span id="modalFiadorNome"></span></p>
+            <p><strong>CPF Fiador:</strong> <span id="modalFiadorCpf"></span></p>
+            <p><strong>Telefone Fiador:</strong> <span id="modalFiadorTelefone"></span></p>
+            <p><strong>Jornada Atual:</strong> <span id="modalJornada"></span></p>
+            <p><strong>Status Cadastro:</strong> <span id="modalStatusCadastro"></span></p>
+        </div>
+    </div>
+</div>
+
+<header>
+    <div class="logo">
+        <div class="img-logo">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                 stroke="#ffffff"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                 class="lucide lucide-users h-5 w-5 text-white"
+                 data-lov-id="src\components\Dashboard.tsx:127:16" data-lov-name="Users"
+                 data-component-path="src\components\Dashboard.tsx" data-component-line="127"
+                 data-component-file="Dashboard.tsx" data-component-name="Users"
+                 data-component-content="%7B%22className%22%3A%22h-5%20w-5%20text-white%22%7D">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                <circle cx="9" cy="7" r="4"></circle>
+                <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+        </div>
+        <h1>Dashboard Wakanders</h1>
+    </div>
+    <div class="header-actions">
+        <div class="theme-toggle" onclick="toggleTheme()">🌙</div>
+        <div class="logout" id="sair"><img src="../static/imagens/sair.svg" alt="" th:src="@{/imagens/sair.svg}"> Sair
+        </div>
+    </div>
+
+
+</header>
+
+<main>
+    <section class="stats">
+        <div class="card blue">
+            <h2>Total de Wakanders</h2>
+            <p id="total-wakanders">-</p>
+        </div>
+        <div class="card green">
+            <h2>Cadastros Completos</h2>
+            <p id="total-completos">-</p>
+        </div>
+        <div class="card orange">
+            <h2>Cadastros Incompletos</h2>
+            <p id="total-incompletos">-</p>
+        </div>
+    </section>
+
+    <section class="actions" id="actions">
+        <button id="sync-asaas" class="btn-sync">Sincronizar Dados do Asaas</button>
+        <button id="sync-wakander" class="btn-sync">Disparar Formulário para Usuários</button>
+        <button id="sync-status" class="btn-sync">Sincronizar Status Wakander</button>
+    </section>
+
+    <section class="filters">
+        <div class="input-container">
+            <input type="text" id="search-input" placeholder="Buscar por nome, CPF ou WhatsApp..." />
+            <button id="search-button" class="search-button">
+                🔍
+            </button>
+        </div>
+
+        <select id="statusSelect">
+            <option value="0">Todos os Status</option>
+            <option value="1">Completo</option>
+            <option value="2">Incompleto</option>
+        </select>
+
+        <div class="toggle-container">
+            <label class="switch">
+                <input type="checkbox" id="includeCancelled" />
+                <span class="slider round"></span>
+            </label>
+            <span class="toggle-label">Incluir Cancelados</span>
+        </div>
+    </section>
+
+
+
+    <section class="list" id="listCards">
+    </section>
+
+    <section id="pagination" class="pagination">
+    </section>
+</main>
+
+<!-- Popup de link -->
+<div id="link-popup-overlay" class="link-popup-overlay">
+    <div class="link-popup">
+        <h3>Link de Atualização</h3>
+        <div class="link-container">
+            <input type="text" id="link-input" readonly>
+            <button id="copy-link" class="btn btn-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+            </button>
+        </div>
+        <div class="link-popup-actions">
+            <button id="close-link-popup" class="btn btn-secondary">Fechar</button>
+        </div>
+    </div>
+</div>
+
+<script src="../static/js/dashboard.js" th:src="@{/js/dashboard.js}"></script>
+<script src="../static/js/requests-dashboard.js" th:src="@{/js/requests-dashboard.js}"></script>
+<script>
+    // Mostrar/ocultar menu de contexto do kebab
+    document.addEventListener('click', function(e) {
+        // Fechar todos os menus de contexto abertos
+        const openMenus = document.querySelectorAll('.kebab-context-menu');
+        openMenus.forEach(menu => {
+            if (!menu.contains(e.target) && !e.target.closest('.kebab-menu')) {
+                menu.style.display = 'none';
+            }
+        });
+        
+        // Fechar o popup de link se clicar fora dele
+        const linkPopup = document.getElementById('link-popup-overlay');
+        if (linkPopup.classList.contains('visible') && e.target === linkPopup) {
+            linkPopup.classList.remove('visible');
+        }
+    });
+    
+    // Função para mostrar o popup com o link
+    function showLinkPopup(link) {
+        const popup = document.getElementById('link-popup-overlay');
+        const linkInput = document.getElementById('link-input');
+        
+        linkInput.value = link;
+        popup.classList.add('visible');
+    }
+    
+    // Copiar link para a área de transferência
+    document.getElementById('copy-link').addEventListener('click', function() {
+        const linkInput = document.getElementById('link-input');
+        linkInput.select();
+        document.execCommand('copy');
+        
+        // Feedback visual
+        const copyButton = this;
+        const originalText = copyButton.innerHTML;
+        copyButton.innerHTML = 'Copiado!';
+        
+        setTimeout(() => {
+            copyButton.innerHTML = originalText;
+        }, 2000);
+    });
+    
+    // Fechar popup
+    document.getElementById('close-link-popup').addEventListener('click', function() {
+        document.getElementById('link-popup-overlay').classList.remove('visible');
+    });
+</script>
+
+</body>
+</html>

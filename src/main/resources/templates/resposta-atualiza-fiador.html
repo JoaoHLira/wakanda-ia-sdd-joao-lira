@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Confirmação de atualização de dados do fiador - Wakanda">
+    <title>Sucesso - Atualização de Fiador | Wakanda</title>
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Atualização Concluída | Wakanda">
+    <meta property="og:description" content="Dados do fiador atualizados com sucesso.">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="/css/resposta-atualiza-fiador.css" th:href="@{/css/resposta-atualiza-fiador.css}">
+    <link rel="shortcut icon" href="/imagens/logoWakanda.ico" type="image/x-icon" th:href="@{/imagens/logoWakanda.ico}">
+</head>
+
+<body class="flex items-center justify-center min-h-screen p-4">
+<div class="form-container success-container text-center animate-fade-in" role="alert" aria-live="polite">
+    <div class="success-checkmark" aria-hidden="true">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
+        </svg>
+    </div>
+
+    <h1 class="title mb-4">Tudo pronto!</h1>
+
+    <p class="success-message">
+        Os dados do fiador foram atualizados com sucesso em nossa base de dados.
+    </p>
+
+    <p class="note-text">
+        Você já pode fechar esta aba ou retornar ao portal.
+    </p>
+
+    <div class="space-y-3">
+        <a href="/wakanda-ai/api/painel-dados/dashboard"
+           class="button-submit"
+           rel="noopener noreferrer">
+            Voltar ao Dashboard
+        </a>
+
+        <button id="btnFechar" class="btn-outline" aria-label="Fechar esta janela">
+            Fechar Janela
+        </button>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const btnFechar = document.getElementById('btnFechar');
+
+        if (btnFechar) {
+            btnFechar.addEventListener('click', function() {
+                try {
+                    window.close();
+                } catch (e) {
+                    console.error('Não foi possível fechar a janela:', e);
+                }
+            });
+        }
+    });
+</script>
+</body>
+</html>

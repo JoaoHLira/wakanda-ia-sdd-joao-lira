@@ -1,0 +1,179 @@
+:root {
+    --color-bg: #1e293b;
+    --color-text: #f0f4f8;
+    --color-text-muted: #94a3b8;
+    --color-card: #0f172a;
+    --color-border: rgba(255, 255, 255, 0.08);
+    --color-primary: #52822c;
+    --color-primary-hover: #436a23;
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --shadow-md: 0 4px 10px rgba(0, 0, 0, 0.45);
+    --radius-md: 8px;
+    --space-1: 8px;
+    --space-2: 12px;
+    --space-3: 16px;
+    --space-4: 20px;
+    --space-5: 24px;
+    --space-6: 30px;
+}
+
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+    background: linear-gradient(135deg, #161e2a 0%, #0d121c 100%);
+    color: var(--color-text);
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+}
+
+.intro {
+    text-align: center;
+    margin: 0 auto var(--space-5);
+    max-width: 1100px;
+    padding: var(--space-6) var(--space-4) 0;
+}
+
+.intro h1 {
+    font-size: 2.5rem;
+    color: var(--color-text);
+    margin: 0 0 var(--space-2);
+}
+
+.intro p {
+    font-size: 1.2rem;
+    color: var(--color-text-muted);
+    margin: 0;
+}
+
+.sections {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: var(--space-4);
+    max-width: 1100px;
+    margin: var(--space-6) auto;
+    padding: 0 var(--space-4) var(--space-6);
+    align-items: stretch;
+}
+
+.section-item {
+    background-color: rgba(15, 23, 42, 0.85);
+    padding: var(--space-6);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-md);
+    text-align: center;
+    transition: transform 200ms ease, box-shadow 200ms ease;
+    border: 1px solid var(--color-border);
+    backdrop-filter: saturate(130%) blur(6px);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    min-height: 280px;
+}
+
+.section-item h2 {
+    font-size: 1.6rem;
+    color: var(--color-text);
+    margin: 0 0 var(--space-3);
+}
+
+.section-item p {
+    color: var(--color-text-muted);
+    font-size: 1rem;
+    margin: 0 0 var(--space-4);
+    flex-grow: 1;
+}
+
+.section-item .btn-primary {
+    margin-top: auto;
+    align-self: center;
+}
+
+.section-item:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.55);
+}
+
+.section-item:focus-within {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+.btn-primary {
+    background-color: var(--color-primary);
+    color: #ffffff;
+    padding: 10px 20px;
+    border-radius: 6px;
+    text-decoration: none;
+    display: inline-block;
+    border: 1px solid transparent;
+    transition: background-color 160ms ease, transform 120ms ease, box-shadow 160ms ease;
+    box-shadow: var(--shadow-sm);
+}
+
+.btn-primary:hover {
+    background-color: var(--color-primary-hover);
+}
+
+.btn-primary:active {
+    transform: translateY(1px);
+}
+
+.btn-primary:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+@media (max-width: 768px) {
+    .section-item {
+        padding: var(--space-5);
+        min-height: 240px;
+    }
+
+    .sections {
+        grid-template-columns: 1fr;
+        padding: 0 var(--space-3) var(--space-5);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .section-item,
+    .btn-primary {
+        transition: none;
+    }
+}
+
+body.dark-mode {
+    --color-bg: #000000;
+    --color-text: #ececec;
+    --color-text-muted: #aaaaaa;
+    --color-card: #000000;
+    --color-border: rgba(255, 255, 255, 0.05);
+}
+.header-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--space-4);
+}
+
+.logout {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    color: #ffffff; /* Texto branco */
+    font-size: 1rem;
+    background-color: transparent; /* Fundo transparente */
+    border: none;
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-md);
+}
+
+.logout img {
+    height: 16px;
+    margin-right: 8px;
+    filter: brightness(0) invert(1); /* Deixa a imagem branca */
+}

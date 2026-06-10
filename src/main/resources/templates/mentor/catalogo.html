@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Catálogo de Missões</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+            rel="stylesheet"
+    >
+
+    <link rel="stylesheet" th:href="@{/css/catalogo.css}">
+    <link rel="shortcut icon" th:href="@{/imagens/logoWakanda.ico}" type="image/x-icon">
+</head>
+
+<body class="catalogo-body">
+
+<header class="catalogo-header">
+    <div class="header-content">
+        <h1 class="header-title">Catálogo de Missões</h1>
+        <p class="header-subtitle">
+            Navegue pela estrutura de Trilhas, Jornadas e Missões da Wakanda-AI.
+        </p>
+
+        <div class="back-wrapper">
+            <a th:href="@{/gameficacao/home}" class="btn-back" aria-label="Voltar para a página inicial">
+                ← Voltar para a Home
+            </a>
+        </div>
+
+    </div>
+</header>
+
+<main class="catalogo-main">
+    <section class="catalogo-intro">
+        <p class="section-description">
+            Selecione uma trilha para visualizar as jornadas e suas missões. Ao clicar em uma missão, você acessa os
+            detalhes e conteúdos relacionados.
+        </p>
+    </section>
+
+    <section class="catalogo-content">
+        <div class="empty-state" style="display:none;">
+            <p>Não há trilhas cadastradas no momento.</p>
+        </div>
+
+        <div class="trilhas-list" id="trilhasList"></div>
+
+    </section>
+</main>
+
+<script th:src="@{/js/catalogo.js}"></script>
+</body>
+</html>

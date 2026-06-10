@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atualização de Dados do Fiador</title>
+    <link rel="stylesheet" href="/css/atualiza-fiador.css" th:href="@{/css/atualiza-fiador.css}">
+    <link rel="shortcut icon" href="/imagens/logoWakanda.ico" type="image/x-icon" th:href="@{/imagens/logoWakanda.ico}">
+</head>
+
+<body class="form-page">
+<div class="form-container">
+    <h1 class="title">Atualize os Dados do Fiador Abaixo.</h1>
+
+    <form id="cadastroForm" class="form-content">
+        <input type="hidden" id="idWakander" name="idWakander" th:value="${idWakander}"/>
+        <div class="form-grid">
+            <!-- Nome Completo -->
+            <div class="form-group full-width">
+                <label for="nome">Nome Completo *</label>
+                <input type="text" id="nome" name="nome" required
+                       class="form-input"
+                       placeholder="Digite seu nome completo">
+            </div>
+
+            <!-- CPF/CNPJ -->
+            <div class="form-group">
+                <label for="cpfCnpj">CPF *</label>
+                <input type="text" id="cpfCnpj" name="cpfCnpj" required
+                       class="form-input cpf-cnpj-mask"
+                       placeholder="000.000.000-00">
+            </div>
+
+            <!-- Email -->
+            <div class="form-group">
+                <label for="email">E-mail *</label>
+                <input type="email" id="email" name="email" required
+                       class="form-input"
+                       placeholder="seu@email.com">
+            </div>
+
+            <!-- Telefone Fixo -->
+            <div class="form-group">
+                <label for="phone">Telefone Fixo</label>
+                <input type="tel" id="phone" name="phone"
+                       class="form-input phone-mask"
+                       placeholder="(00) 0000-0000">
+            </div>
+
+            <!-- Celular -->
+            <div class="form-group">
+                <label for="mobilePhone">WhatsApp *</label>
+                <input type="tel" id="mobilePhone" name="mobilePhone" required
+                       class="form-input phone-mask"
+                       placeholder="(00) 00000-0000">
+            </div>
+
+            <!-- CEP -->
+            <div class="form-group">
+                <label for="postalCode">CEP *</label>
+                <input type="text" id="postalCode" name="postalCode" required
+                       class="form-input cep-mask"
+                       placeholder="00000-000">
+            </div>
+
+            <!-- Endereço -->
+            <div class="form-group full-width">
+                <label for="address">Endereço *</label>
+                <input type="text" id="address" name="address" required
+                       class="form-input"
+                       placeholder="Rua, Avenida, etc.">
+            </div>
+
+            <!-- Número -->
+            <div class="form-group">
+                <label for="addressNumber">Número *</label>
+                <input type="text" id="addressNumber" name="addressNumber" required
+                       class="form-input"
+                       placeholder="Número">
+            </div>
+
+            <!-- Complemento -->
+            <div class="form-group">
+                <label for="complement">Complemento</label>
+                <input type="text" id="complement" name="complement"
+                       class="form-input"
+                       placeholder="Apto, Bloco, etc.">
+            </div>
+
+            <!-- Bairro -->
+            <div class="form-group full-width">
+                <label for="province">Bairro *</label>
+                <input type="text" id="province" name="province" required
+                       class="form-input"
+                       placeholder="Seu bairro">
+            </div>
+
+            <!-- Notificações -->
+            <div class="form-group full-width checkbox-container">
+                <input type="checkbox" id="notificationDisabled" name="notificationDisabled">
+                <label for="notificationDisabled">
+                    Desativar notificações de cobrança
+                </label>
+            </div>
+        </div>
+
+        <button type="submit" class="button-submit">
+            <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+            Confirmar Cadastro
+        </button>
+
+        <div id="messageArea" class="message-area"></div>
+    </form>
+</div>
+
+<script src="/js/atualiza-fiador.js" th:src="@{/js/atualiza-fiador.js}"></script>
+</body>
+</html>

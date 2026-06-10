@@ -1,0 +1,73 @@
+{
+  "type": 0,
+  "code": "CfmeNNJe",
+  "inviter": {
+    "id": "1365299927969697802",
+    "username": "BotConviteWakanders",
+    "avatar": null,
+    "discriminator": "0372",
+    "public_flags": 0,
+    "flags": 0,
+    "bot": true,
+    "banner": null,
+    "accent_color": null,
+    "global_name": null,
+    "avatar_decoration_data": null,
+    "collectibles": null,
+    "banner_color": null,
+    "clan": null,
+    "primary_guild": null
+  },
+  "max_age": 86400,
+  "created_at": "2025-05-19T20:45:43.102015+00:00",
+  "expires_at": "2025-05-20T20:45:43+00:00",
+  "guild": {
+    "id": "963147104258256957",
+    "name": "Wakanda Academy",
+    "splash": null,
+    "banner": null,
+    "description": null,
+    "icon": "25cc0dee1b23838e1ce691e9c1c37d44",
+    "features": [
+      "CHANNEL_ICON_EMOJIS_GENERATED",
+      "SOUNDBOARD"
+    ],
+    "verification_level": 0,
+    "vanity_url_code": null,
+    "nsfw_level": 0,
+    "nsfw": false,
+    "premium_subscription_count": 0,
+    "premium_tier": 0
+  },
+  "guild_id": "963147104258256957",
+  "channel": {
+    "id": "963147104702828628",
+    "type": 0,
+    "name": "seja-bem-vindo"
+  },
+  "profile": {
+    "id": "963147104258256957",
+    "name": "Wakanda Academy",
+    "icon_hash": "25cc0dee1b23838e1ce691e9c1c37d44",
+    "member_count": 320,
+    "online_count": 20,
+    "description": null,
+    "banner_hash": null,
+    "game_application_ids": [],
+    "game_activity": {},
+    "tag": null,
+    "badge": 0,
+    "badge_color_primary": "#ff0000",
+    "badge_color_secondary": "#800000",
+    "badge_hash": null,
+    "traits": [],
+    "features": [],
+    "visibility": 2,
+    "custom_banner_hash": null,
+    "premium_subscription_count": 0,
+    "premium_tier": 0
+  },
+  "uses": 0,
+  "max_uses": 0,
+  "temporary": false
+}

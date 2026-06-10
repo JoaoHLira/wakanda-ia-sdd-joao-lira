@@ -1,0 +1,423 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap");
+
+:root {
+  --bg-gradient-dark-1: #001f3f;
+  --bg-gradient-dark-2: #004080;
+  --container-bg-dark: #ffffff;
+  --container-shadow-dark: rgba(0, 0, 0, 0.3);
+  --corner-bar-bg-dark: #001f3f;
+  --h1-color-dark: #001f3f;
+  --p-color-dark: #333;
+  --label-color-dark: #001f3f;
+  --input-bg-dark: #cccccc;
+  --input-focus-bg-dark: #e0e0e0;
+  --button-bg-dark: #001f3f;
+  --button-hover-bg-dark: #334d6e;
+  --error-bg-dark: #ffeeee;
+  --error-text-dark: red;
+  --success-text-dark: green;
+  --help-button-bg-dark: #28a745;
+  --help-button-hover-bg-dark: #218838;
+
+  --slider-track-night-bg: #f0f0f0;
+  --slider-knob-night-bg: #001f3f;
+  --slider-icon-night-color: #f0f0f0;
+}
+
+body.light-mode {
+  --bg-gradient-light-1: #e0f2f7;
+  --bg-gradient-light-2: #b2ebf2;
+  --container-bg-light: #fefefe;
+  --container-shadow-light: rgba(0, 0, 0, 0.1);
+  --corner-bar-bg-light: #81d4fa;
+  --h1-color-light: #0277bd;
+  --p-color-light: #555;
+  --label-color-light: #0277bd;
+  --input-bg-light: #e3f2fd;
+  --input-focus-bg-light: #bbdefb;
+  --button-bg-light: #0277bd;
+  --button-hover-bg-light: #01579b;
+  --error-bg-light: #ffebee;
+  --error-text-light: #d32f2f;
+  --success-text-light: #388e3c;
+  --help-button-bg-light: #28a745;
+  --help-button-hover-bg-light: #218838;
+
+  --slider-track-day-bg: #0277bd;
+  --slider-knob-day-bg: #f0f0f0;
+  --slider-icon-day-color: #0277bd;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Montserrat", sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+body {
+  background: linear-gradient(270deg, var(--bg-gradient-dark-1), var(--bg-gradient-dark-2), var(--bg-gradient-dark-1));
+  background-size: 600% 600%;
+  animation: gradientMove 12s ease infinite;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  padding: 20px;
+}
+
+body.light-mode {
+  background: linear-gradient(270deg, var(--bg-gradient-light-1), var(--bg-gradient-light-2), var(--bg-gradient-light-1));
+  background-size: 600% 600%;
+  animation: gradientMove 12s ease infinite;
+}
+
+@keyframes gradientMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.loading-spinner {
+  display: inline-block;
+  animation: slow-spin 2s linear infinite;
+  margin-right: 6px;
+}
+
+@keyframes slow-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+}
+
+.container {
+  position: relative;
+  background-color: var(--container-bg-dark);
+  border-radius: 15px;
+  box-shadow: 0 5px 15px var(--container-shadow-dark);
+  padding: 30px 20px;
+  overflow: hidden;
+  z-index: 2;
+  text-align: center;
+}
+
+body.light-mode .container {
+  background-color: var(--container-bg-light);
+  box-shadow: 0 5px 15px var(--container-shadow-light);
+}
+
+.corner-bar {
+  position: absolute;
+  top: -5px;
+  left: 0;
+  width: 100%;
+  height: 15px;
+  background-color: var(--corner-bar-bg-dark);
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  z-index: 1;
+}
+
+body.light-mode .corner-bar {
+  background-color: var(--corner-bar-bg-light);
+}
+
+h1 {
+  color: var(--h1-color-dark);
+  font-size: 24px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+body.light-mode h1 {
+  color: var(--h1-color-light);
+}
+
+p {
+  color: var(--p-color-dark);
+  font-size: 16.5px;
+  font-weight: 500;
+  text-align: center;
+  margin-bottom: 35px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+body.light-mode p {
+  color: var(--p-color-light);
+}
+
+.input-group {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 24px;
+}
+
+.input-group label {
+  color: var(--label-color-dark);
+  font-weight: 500;
+  font-size: 16px;
+  width: auto;
+  min-width: 60px;
+  text-align: right;
+  white-space: nowrap;
+}
+
+body.light-mode .input-group label {
+  color: var(--label-color-light);
+}
+
+.input-group input {
+  flex-grow: 1;
+  min-width: 0;
+  padding: 12px 14px;
+  background-color: var(--input-bg-dark);
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  transition: all 0.2s ease-in-out;
+}
+
+body.light-mode .input-group input {
+  background-color: var(--input-bg-light);
+}
+
+.input-group input:focus {
+  outline: none;
+  background-color: var(--input-focus-bg-dark);
+}
+
+body.light-mode .input-group input:focus {
+  background-color: var(--input-focus-bg-light);
+}
+
+.button-group {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  margin-top: 30px;
+  flex-wrap: wrap;
+}
+
+button {
+  background-color: var(--button-bg-dark);
+  color: #ffffff;
+  font-weight: 600;
+  text-transform: uppercase;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 9px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: background-color 0.3s ease;
+  flex-shrink: 0;
+  flex-grow: 1;
+  max-width: 150px;
+}
+
+body.light-mode button {
+  background-color: var(--button-bg-light);
+}
+
+button:hover {
+  background-color: var(--button-hover-bg-dark);
+}
+
+body.light-mode button:hover {
+  background-color: var(--button-hover-bg-light);
+}
+
+.help-button {
+  background-color: var(--help-button-bg-dark);
+  margin-top: 0;
+  display: none;
+}
+
+body.light-mode .help-button {
+  background-color: var(--help-button-bg-light);
+}
+
+.help-button:hover {
+  background-color: var(--help-button-hover-bg-dark);
+}
+
+body.light-mode .help-button:hover {
+  background-color: var(--help-button-hover-bg-light);
+}
+
+.error-message-container {
+  display: flex;
+  align-items: center;
+  background-color: var(--error-bg-dark);
+  color: var(--error-text-dark);
+  border-radius: 12px;
+  padding: 10px 15px;
+  margin-bottom: 20px;
+  font-weight: 500;
+  font-size: 14.5px;
+  animation: fadeIn 0.3s ease-in-out;
+  justify-content: flex-start;
+}
+
+body.light-mode .error-message-container {
+  background-color: var(--error-bg-light);
+  color: var(--error-text-light);
+}
+
+.error-message-container .icon {
+  margin-right: 8px;
+  font-size: 18px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.success-message {
+  color: var(--success-text-dark);
+  font-weight: 500;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+body.light-mode .success-message {
+  color: var(--success-text-light);
+}
+
+.theme-switch-wrapper {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+}
+
+.theme-switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+.theme-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--slider-track-night-bg);
+  -webkit-transition: .4s;
+  transition: .4s;
+  border-radius: 34px;
+}
+
+body.light-mode .slider {
+  background-color: var(--slider-track-day-bg);
+}
+
+.slider:before {
+  position: absolute;
+  content: "🌙";
+  font-family: 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji', 'Segoe UI Symbol', 'Android Emoji', sans-serif;
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: var(--slider-knob-night-bg);
+  color: var(--slider-icon-night-color);
+  -webkit-transition: .4s;
+  transition: .4s;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  line-height: 1;
+  z-index: 2;
+}
+
+input:checked + .slider {
+  background-color: var(--slider-track-day-bg);
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+  background-color: var(--slider-knob-day-bg);
+  content: "☀️";
+  color: var(--slider-icon-day-color);
+}
+
+@media screen and (max-width: 480px) {
+  h1 {
+    font-size: 20px;
+  }
+
+  p {
+    font-size: 11px;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .input-group {
+    gap: 10px;
+  }
+
+  .input-group label {
+    font-size: 14px;
+    min-width: 50px;
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  .input-group input {
+    font-size: 14px;
+    padding: 8px 10px;
+  }
+
+  .button-group {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .button-group button {
+    width: 80%;
+    max-width: unset;
+  }
+
+  .error-message-container {
+    font-size: 13px;
+    padding: 8px 12px;
+  }
+
+  .error-message-container .icon {
+    font-size: 16px;
+  }
+
+  .theme-switch-wrapper {
+    top: 10px;
+    right: 10px;
+    transform: scale(0.8);
+    transform-origin: top right;
+  }
+}

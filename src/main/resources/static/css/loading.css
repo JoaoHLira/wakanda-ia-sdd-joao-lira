@@ -1,0 +1,101 @@
+/* HTML: <div class="loader"></div> */
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+
+}
+/*loading*/
+
+/* HTML: <div class="loader"></div> */
+.blackscreen{
+    height: 100vh;
+    width: 100vw;
+    background-color: rgba(0, 0, 0, 0.295);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+}
+.loader {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    transform: rotate(45deg);
+    animation: l3-0 1.5s infinite linear;
+}
+.loader:before,
+.loader:after {
+    content: "";
+    width: 50%;
+    background: #514b82;
+    clip-path: polygon(0 50%,100% 0,100% 100%);
+    animation: inherit;
+    animation-name: l3-1;
+}
+.loader:after {
+    clip-path: polygon(0 0,100% 50%,0% 100%);
+    animation-name: l3-2;
+}
+@keyframes l3-0 {
+    25% {width:50px;height:50px;transform:rotate(0)}
+    50% {width:50px;height:50px}
+    75% {width:70.70px;height:35.35px}
+    100%{width:70.70px;height:35.35px;transform:rotate(0)}
+}
+@keyframes l3-1 {
+    0%,25% {clip-path: polygon(0 50% ,100% 0,100% 100%);transform:translate(0.3px)}
+    50%    {clip-path: polygon(0 50% ,100% 0,100% 100%);transform:translate(-5px)}
+    75%    {clip-path: polygon(0 100%,0    0,100% 100%);transform:translate(-5px)}
+    100%   {clip-path: polygon(0 100%,0    0,100% 100%);transform:translate(17.7px)}
+}
+@keyframes l3-2 {
+    0%,25% {clip-path: polygon(0 0,100% 50%,0    100%);transform:translate(-0.3px) }
+    50%    {clip-path: polygon(0 0,100% 50%,0    100%);transform:translate(5px) }
+    75%    {clip-path: polygon(0 0,100% 0  ,100% 100%);transform:translate(5px)}
+    100%   {clip-path: polygon(0 0,100% 0  ,100% 100%);transform:translate(-17.7px) }
+}
+
+#blackScreen{
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+    align-items: center;
+    justify-content: center;    
+    z-index: 10000000;
+}
+
+.modal-result {
+    background-color: #fff;
+    width: 400px;
+    padding: 30px 20px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.modal-result:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+.modal-result img {
+    height: 80px;
+}
+
+.modal-result h3 {
+    font-size: 1.2rem;
+    color: #000000;
+    text-align: center;
+    font-family: Arial, sans-serif;
+}
+
+

@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "POST",
+    "urlPathPattern": "/stub/z-api/instances/[^/]+/token/[^/]+/send-text",
+    "bodyPatterns": [
+      {
+        "matchesJsonPath": "$"
+      }
+    ]
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "z-api-post-ok-envia-texto-simples.json",
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

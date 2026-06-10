@@ -1,0 +1,3 @@
+ALTER TABLE wakander
+    ALTER COLUMN cpf DROP NOT NULL;
+ALTER TABLE wakander DROP CONSTRAINT wakander_unique;

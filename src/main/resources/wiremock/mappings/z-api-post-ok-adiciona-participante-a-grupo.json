@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "POST",
+    "urlPathPattern": "/stub/z-api/instances/[^/]+/token/[^/]+/add-participant",
+    "bodyPatterns": [
+      {
+        "matchesJsonPath": "$"
+      }
+    ]
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "z-api-post-ok-adiciona-participante-a-grupo.json",
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

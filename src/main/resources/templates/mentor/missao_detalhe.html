@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <title th:text="'Missão - ' + ${missao.titulo}">Detalhes da Missão</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="../../static/css/missao_detalhe.css" th:href="@{/css/missao_detalhe.css}" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    <link rel="shortcut icon" href="/imagens/logoWakanda.ico" type="image/x-icon" th:href="@{/imagens/logoWakanda.ico}">
+</head>
+
+<body class="detalhe-body">
+
+<header class="detalhe-header">
+    <div class="header-content">
+        <h1 class="header-title">Detalhes da Missão</h1>
+        <p class="header-subtitle">
+            Visualize todas as informações detalhadas sobre esta Missão.
+        </p>
+    </div>
+</header>
+
+<main class="detalhe-main">
+
+    <div class="back-wrapper">
+        <a th:href="@{/gameficacao/catalogo/missoes}" class="btn-back">
+            ← Voltar para o Catálogo de Missões
+        </a>
+    </div>
+
+    <section class="mission-card">
+        <header class="mission-header">
+            <div class="mission-title-block">
+                <p class="mission-label">Missão</p>
+                <h2 class="mission-title" th:text="${missao.titulo}">Nome da Missão</h2>
+            </div>
+
+            <div class="mission-xp-summary">
+                <p class="xp-label">XP Total</p>
+                <p class="xp-value" th:text="${missao.xpBase} + ' XP'">0 XP</p>
+            </div>
+        </header>
+
+        <section class="mission-section">
+            <h3 class="section-title">Descrição da Missão</h3>
+            <p class="mission-description" th:text="${missao.descricao}">
+                Aqui vai a descrição detalhada da missão, objetivos, contexto e orientações gerais.
+            </p>
+        </section>
+
+        <section class="mission-section">
+            <h3 class="section-title">Sabedorias Desenvolvidas</h3>
+            <p class="section-helper">
+                Distribuição das sabedorias que o Wakander desenvolve ao concluir esta missão.
+            </p>
+
+            <div class="wisdom-grid">
+                <article class="wisdom-card">
+                    <h4 class="wisdom-title">Teórico</h4>
+                    <p class="wisdom-xp" th:text="${missao.sabedorias.teorico} + ' XP'">0 XP</p>
+                    <p class="wisdom-caption">Fundamentos conceituais e entendimento teórico.</p>
+                </article>
+
+                <article class="wisdom-card">
+                    <h4 class="wisdom-title">Processo</h4>
+                    <p class="wisdom-xp" th:text="${missao.sabedorias.processo} + ' XP'">0 XP</p>
+                    <p class="wisdom-caption">Passo a passo, fluxos e métodos estruturados.</p>
+                </article>
+
+                <article class="wisdom-card">
+                    <h4 class="wisdom-title">Know-How</h4>
+                    <p class="wisdom-xp" th:text="${missao.sabedorias.knowHow} + ' XP'">0 XP</p>
+                    <p class="wisdom-caption">Habilidade prática e aplicabilidade técnica.</p>
+                </article>
+
+                <article class="wisdom-card">
+                    <h4 class="wisdom-title">Comportamental</h4>
+                    <p class="wisdom-xp" th:text="${missao.sabedorias.comportamental} + ' XP'">0 XP</p>
+                    <p class="wisdom-caption">Postura, disciplina, colaboração e atitude.</p>
+                </article>
+
+                <article class="wisdom-card">
+                    <h4 class="wisdom-title">Criativo</h4>
+                    <p class="wisdom-xp" th:text="${missao.sabedorias.criativo} + ' XP'">0 XP</p>
+                    <p class="wisdom-caption">Experimentação, inovação e visão fora da caixa.</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="mission-section">
+            <h3 class="section-title">Pré-requisitos para iniciar a missão</h3>
+            <p class="mission-description">
+                Para iniciar esta missão, o Wakander precisa ter concluído a missão anterior na jornada.
+            </p>
+        </section>
+
+        <section class="mission-section">
+            <h3 class="section-title">Conteúdo da Missão</h3>
+            <p class="section-helper">
+                Acesse o conteúdo da missão clicando no botão abaixo:
+            </p>
+
+            <div class="content-link-wrapper">
+                <!-- Botão que será configurado futuramente com o link -->
+                <a class="btn-primary" href="#" role="button" aria-disabled="true">
+                    Acessar conteúdo da missão →
+                </a>
+            </div>
+        </section>
+
+
+    </section>
+
+</main>
+
+</body>
+</html>

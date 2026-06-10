@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulário Já Preenchido</title>
+    <link rel="stylesheet" href="/css/formulario-status-completo.css" th:href="@{/css/formulario-status-completo.css}">
+</head>
+<body>
+<div class="form-container">
+    <div class="title-form">
+        <h1>✅Seus dados já foram recebidos com sucesso e não há necessidade de enviá-los novamente!</h1>
+    </div>
+    <div class="mensagem">
+        <p class="mensagem-branca">
+            Precisa corrigir alguma informação❓<br>
+            Clique no botão abaixo 👇
+        </p>
+        <button id="btnSuporte" th:data-nome="${wakander.nome}">🚀 Falar com o Suporte Wakanda 🚀</button>
+    </div>
+</div>
+<script src="/js/formulario-status-completo.js" th:src="@{/js/formulario-status-completo.js}"></script>
+</body>
+</html>

@@ -1,0 +1,2 @@
+ALTER TABLE jornada_wakanda
+ADD COLUMN status_jornada VARCHAR(30) NOT NULL DEFAULT 'ATIVA';

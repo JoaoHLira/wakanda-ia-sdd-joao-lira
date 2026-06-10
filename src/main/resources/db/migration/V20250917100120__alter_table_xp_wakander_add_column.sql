@@ -1,0 +1,1 @@
+ALTER TABLE xp_wakander ADD COLUMN xp_proximo_nivel integer;

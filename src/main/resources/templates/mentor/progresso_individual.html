@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Progresso Individual</title>
+    <link
+      rel="icon"
+      type="image/x-icon"
+      th:href="@{/imagens/logoWakanda.ico}"
+    />
+    <link rel="stylesheet" href="/static/css/progresso_individual.css" th:href="@{/css/progresso_individual.css}" />
+  </head>
+  <body>
+    <header>
+      <div class="logo">
+        <img
+          class="logo-img"
+          th:src="@{/imagens/logoWakanda.ico}"
+          alt="Logo Wakanda-AI"
+        />
+        <span class="logo-text">Wakanda-AI</span>
+      </div>
+      <div class="header-actions">
+        <button class="theme-toggle" id="toggleTheme">🌙</button>
+      </div>
+    </header>
+
+    <main>
+      <div class="back-wrapper">
+        <a class="btn-back" th:href="@{/gameficacao/home}"
+          >← Voltar para a Home</a
+        >
+      </div>
+
+      <!-- Título e descrição -->
+      <section class="card title-card">
+        <h1>Progresso Individual dos Wakanders</h1>
+        <h4>
+          Busque por CPF, nome ou WhatsApp e acompanhe a evolução completa de
+          cada Wakander.
+        </h4>
+      </section>
+
+      <div class="spacer" style="height: 24px"></div>
+
+      <!-- Bloco de busca -->
+      <section class="card search-card">
+        <h2>Buscar Wakander</h2>
+        <form
+          method="POST"
+          th:action="@{/gameficacao/progresso}"
+          class="search-form"
+        >
+          <input
+            type="text"
+            name="query"
+            placeholder="Digite CPF, nome ou WhatsApp"
+            required
+          />
+          <button type="submit">🔎 Buscar</button>
+        </form>
+
+        <!-- Mensagem de erro -->
+        <div th:if="${buscaRealizada} and ${progresso == null}">
+          class="no-results">
+          <h4>Nenhum Wakander encontrado.</h4>
+        </div>
+      </section>
+
+      <!-- Conteúdo condicional -->
+      <div th:if="${progresso != null}">
+        <section class="wakander-info card">
+          <div class="info-row">
+            <strong>Nome:</strong> <span th:text="${progresso.nome}"></span>
+          </div>
+          <div class="info-row">
+            <strong>Última missão:</strong>
+            <span th:text="${progresso.titulo}"></span>
+          </div>
+          <div class="info-row">
+            <strong>Concluida em:</strong>
+            <span
+              id="ultimaAtualizacao"
+              th:text="${progresso.ultimaAtualizacao}"
+            ></span>
+          </div>
+        </section>
+
+        <section class="stats">
+          <div class="card green">
+            <h2>Nível Atual</h2>
+            <p th:text="${progresso.nivelAtual}"></p>
+          </div>
+          <div class="card blue">
+            <h2>XP Total</h2>
+            <p th:text="${progresso.xpTotal}"></p>
+          </div>
+        </section>
+
+        <section class="card">
+          <h2>Sabedorias adquiridas</h2>
+          <div class="badges" id="sabedoriasBadges"></div>
+        </section>
+
+        <div class="spacer" style="height: 24px"></div>
+
+        <section class="card radar-card">
+          <h2>Domínio por Sabedoria</h2>
+          <div
+            id="radarContainer"
+            data-levels="4"
+            th:data-labels="${progresso.labelsSabedoriasJson}"
+            th:data-values="${progresso.valoresSabedoriasJson}"
+          ></div>
+        </section>
+
+        <div class="spacer" style="height: 24px"></div>
+
+        <section class="card">
+          <h2>XP para o próximo nível</h2>
+          <div class="progress-bar">
+            <div
+              class="progress-fill"
+              th:style="'width: ' + (${progresso.xpTotal} * 100 / ${progresso.xpProximoNivel}) + '%'"
+            ></div>
+          </div>
+          <div class="progress-values">
+            <span th:text="${progresso.xpTotal + ' XP'}"></span> /
+            <span th:text="${progresso.xpProximoNivel + ' XP'}"></span>
+          </div>
+          <div
+            th:if="${(progresso.xpTotal * 100 / progresso.xpProximoNivel) >= 90}"
+          >
+            <p class="level-hint">🔥 Falta pouco para o próximo nível!</p>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <div class="modal-overlay" id="notFoundModal">
+      <div class="popup">
+        <div class="icon error">⚠️</div>
+        <div class="message">Wakander não encontrado</div>
+        <button class="btn-close" id="closeModal">Fechar</button>
+      </div>
+    </div>
+
+    <script th:src="@{/js/progresso_individual.js}"></script>
+  </body>
+</html>

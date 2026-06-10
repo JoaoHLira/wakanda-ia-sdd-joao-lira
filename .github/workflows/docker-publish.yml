@@ -1,0 +1,315 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+# ATENÇÃO!
+# Este arquivo é essencial para o deploy da aplicação,
+# qualquer alteração feita aqui irá impactar diretamente no funcionamento do CI/CD e da aplicação em produção.
+
+name: Docker CI/CD
+
+
+on:
+  push:
+    branches: [ "dev" ]
+    # Publish semver tags as releases.
+    tags: [ 'v*.*.*' ]
+  pull_request:
+    branches: [ "dev" ]
+
+
+env:
+  # Use docker.io for Docker Hub if empty
+  REGISTRY: ghcr.io
+  # github.repository as <account>/<repo>
+  IMAGE_NAME: ${{ github.repository }}
+  # Healthcheck URL for the application
+  HEALTH_URL_LOCAL: ${{ vars.HEALTH_URL }}
+
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      # This is used to complete the identity challenge
+      # with sigstore/fulcio when running outside of PRs.
+      id-token: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # Set up BuildKit Docker container builder to be able to build
+      # multi-platform images and export cache
+      # https://github.com/docker/setup-buildx-action
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@f95db51fddba0c2d1ec667646a06c2ce06100226 # v3.0.0
+
+      # Login against a Docker registry except on PR
+      # https://github.com/docker/login-action
+      - name: Log into registry ${{ env.REGISTRY }}
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d # v3.0.0
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Compute version
+        id: ver
+        run: echo "VERSION=$(date +'%Y.%m.%d.%H%M')" >> $GITHUB_ENV
+
+
+        # Extract metadata (tags, labels) for Docker
+      # https://github.com/docker/metadata-action
+      - name: Extract Docker metadata
+        id: meta
+        uses: docker/metadata-action@96383f45573cb7f253c731d3b3ab81c87ef81934 # v5.0.0
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            # 1) latest
+            type=raw,value=latest               # latest
+            # 2) CalVer release vYYYY.mm.dd.HHMM
+            type=raw,value=${{ env.VERSION }}   # 2025.06.12.1543
+            # 3) Branch
+            type=ref,event=branch               # dev, feature-foo
+            # 4) Pull-request
+            type=ref,event=pr                   # pr-123
+
+      # Build and push Docker image with Buildx (don't push on PR)
+      # https://github.com/docker/build-push-action
+      - name: Build Docker image
+        id: build
+        uses: docker/build-push-action@0565240e2d4ab88bba5387d719585280857ece09 # v5.0.0
+        with:
+          context: .
+          push: false
+          load: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Run dev compose and application image
+        run: |
+          docker compose -f docker-compose.dev.yml up -d --wait --wait-timeout 240
+          IMAGE=$(echo "${{ steps.meta.outputs.tags }}" | head -n 1)
+          docker run -d \
+          --name tmp-check \
+          --network wakanda-ai_default \
+          -e HEALTH_URL=${{ env.HEALTH_URL_LOCAL }} \
+          -e APP_PROFILE=local \
+          -e DATASOURCE_URL="jdbc:postgresql://postgres_container:5432/wakandaaidb?currentSchema=wakanda-ai" \
+          -e AWS_SQS_LOCAL_ENDPOINT="http://localstack:4566" \
+          -e AWS_SNS_LOCAL_ENDPOINT="http://localstack:4566" \
+          -p 8080:8080 \
+          "$IMAGE"
+
+      - name: Healthcheck
+        run: |
+          for i in {1..48}; do # 48*5 s = 240 s
+            status=$(docker inspect -f '{{.State.Health.Status}}' tmp-check 2>/dev/null || echo "unknown")
+            echo "Health status: $status"
+            if [ "$status" = "healthy" ]; then
+              echo "Container healthy in $((i*5)) s"
+              break
+            elif [ "$status" = "unhealthy" ]; then
+              echo "Healthcheck marked as unhealthy"
+              docker logs tmp-check; exit 1
+            fi
+            sleep 5
+          done
+          curl --fail ${{ env.HEALTH_URL_LOCAL }}
+          docker logs tmp-check
+
+      - name: Remove containers
+        run: |
+          docker stop tmp-check && docker rm tmp-check
+          docker compose -f docker-compose.dev.yml down
+
+      - name: Push Docker image
+        id: push
+        if: github.event_name != 'pull_request' && success()
+        uses: docker/build-push-action@0565240e2d4ab88bba5387d719585280857ece09 # v5.0.0
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    environment: production
+    if: github.event_name != 'pull_request' && success()
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up environment variables
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          cat > .env.prod <<'EOF'
+          # ------ Java / Spring ------
+          JAVA_OPTS=${{ vars.JAVA_OPTIONS }}
+          TZ=${{ vars.TIMEZONE }}
+          LOG_LEVEL=${{ vars.LOG_LEVEL }}
+          APP_PROFILE=${{ vars.APP_PROFILE }}
+          HEALTH_URL=${{ vars.HEALTH_URL }}
+          WAKANDA_AI_PORT=${{ secrets.WAKANDA_AI_PORT }}
+
+          # ------ Database ------
+          DATASOURCE_USER=${{ secrets.DATABASE_USER }}
+          DATASOURCE_PASS=${{ secrets.DATABASE_PASSWORD }}
+          DATASOURCE_PORT=${{ secrets.DATABASE_PORT }}
+          DATASOURCE_NAME=${{ secrets.DATABASE_NAME }}
+          DATASOURCE_URL=jdbc:postgresql://${{ secrets.RDS_ENDPOINT }}:${{ secrets.DATABASE_PORT }}/${{ secrets.DATABASE_NAME }}?currentSchema=${{ secrets.DATABASE_SCHEMA }}
+
+          # ------ AWS ------
+            # ------ Spring Config ------
+          AWS_ACCESS_KEY=${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_KEY=${{ secrets.AWS_SECRET_KEY }}
+          AWS_SNS_REGION=${{ secrets.AWS_SNS_REGION }}
+          AWS_SQS_REGION=${{ secrets.AWS_SQS_REGION }}
+            # ------ Application ------
+          AWS_URL=${{ vars.APPLICATION_BASE_URL }}
+              # ------ SNS ------
+          AWS_TOPIC_TESTE=${{ secrets.AWS_TOPIC_TESTE }}
+          AWS_TOPIC_ZAPI_REQUESTS=${{ secrets.AWS_TOPIC_ZAPI_REQUESTS }}
+          AWS_TOPIC_MEMBERKIT_REQUESTS=${{ secrets.AWS_TOPIC_MEMBERKIT_REQUESTS }}
+          AWS_TOPIC_ASAAS_REQUESTS=${{ secrets.AWS_TOPIC_ASAAS_REQUESTS }}
+          AWS_TOPIC_CLINT_CONTATO_REQUESTS=${{ secrets.AWS_TOPIC_CLINT_CONTATO_REQUESTS }}
+          AWS_TOPIC_DISCORD_REQUESTS=${{ secrets.AWS_TOPIC_DISCORD_REQUESTS }}
+          AWS_TOPIC_CLINT_REQUESTS=${{ secrets.AWS_TOPIC_CLINT_REQUESTS }}
+          AWS_TOPIC_PROGRESSO_WAKANDER_REQUESTS=${{ secrets.AWS_TOPIC_PROGRESSO_WAKANDER_REQUESTS }}
+          AWS_TOPIC_XP_WAKANDER_REQUESTS=${{ secrets.AWS_TOPIC_XP_WAKANDER_REQUESTS }}
+              # ------ SQS ------
+          AWS_QUEUE_TESTE=${{ secrets.AWS_QUEUE_TESTE }}
+          AWS_QUEUE_ZAPI_REQUESTS=${{ secrets.AWS_QUEUE_ZAPI_REQUESTS }}
+          AWS_QUEUE_ZAPI_REQUESTS_DLQ=${{ secrets.AWS_QUEUE_ZAPI_REQUESTS_DLQ }}
+          AWS_QUEUE_MEMBERKIT_REQUESTS=${{ secrets.AWS_QUEUE_MEMBERKIT_REQUESTS }}
+          AWS_QUEUE_MEMBERKIT_REQUESTS_DLQ=${{ secrets.AWS_QUEUE_MEMBERKIT_REQUESTS_DLQ }}
+          AWS_QUEUE_CLINT_CONTATO_REQUESTS=${{ secrets.AWS_QUEUE_CLINT_CONTATO_REQUESTS }}
+          AWS_QUEUE_CLINT_CONTATO_REQUESTS_DLQ=${{ secrets.AWS_QUEUE_CLINT_CONTATO_REQUESTS_DLQ }}
+          AWS_QUEUE_CLINT_REQUESTS_DLQ=${{ secrets.AWS_QUEUE_CLINT_REQUESTS_DLQ }}
+          AWS_QUEUE_CLINT_REQUESTS=${{ secrets.AWS_QUEUE_CLINT_REQUESTS }}
+          AWS_QUEUE_ZAPI_REQUESTS_DELAY=${{ secrets.AWS_QUEUE_ZAPI_REQUESTS_DELAY }}
+          AWS_QUEUE_ZAPI_REQUESTS_DELAY_DLQ=${{ secrets.AWS_QUEUE_ZAPI_REQUESTS_DELAY_DLQ }}
+          AWS_QUEUE_DISCORD_REQUESTS=${{ secrets.AWS_QUEUE_DISCORD_REQUESTS }}
+          AWS_QUEUE_DISCORD_REQUESTS_DLQ=${{ secrets.AWS_QUEUE_DISCORD_REQUESTS_DLQ }}
+          AWS_QUEUE_ASAAS_REQUESTS=${{ secrets.AWS_QUEUE_ASAAS_REQUESTS }}
+          AWS_QUEUE_PROGRESSO_WAKANDER_REQUESTS=${{ secrets.AWS_QUEUE_PROGRESSO_WAKANDER_REQUESTS }}
+          AWS_QUEUE_PROGRESSO_WAKANDER_REQUESTS_DLQ=${{ secrets.AWS_QUEUE_PROGRESSO_WAKANDER_REQUESTS_DLQ }}
+          AWS_QUEUE_XP_WAKANDER_REQUESTS=${{ secrets.AWS_QUEUE_XP_WAKANDER_REQUESTS }}
+          AWS_QUEUE_XP_WAKANDER_REQUEST_DLQ=${{ secrets.AWS_QUEUE_XP_WAKANDER_REQUEST_DLQ }}
+
+          # ------ Z-API ------
+          Z_API_BASE_URL=${{ vars.Z_API_BASE_URL }}
+          Z_API_INSTANCIA_ID=${{ secrets.Z_API_INSTANCIA_ID }}
+          Z_API_TOKEN_INSTANCIA=${{ secrets.Z_API_TOKEN_INSTANCIA }}
+          Z_API_TOKEN_CLIENTE=${{ secrets.Z_API_TOKEN_CLIENTE }}
+          Z_API_PHONE_SUPORTE=${{ vars.Z_API_PHONE_SUPORTE }}
+          Z_API_GROUP_ID_LIDERES=${{ secrets.Z_API_GROUP_ID_LIDERES }}
+          Z_API_GROUP_ID_PROFISSAO_PROGRAMADOR=${{ secrets.Z_API_GROUP_ID_PROFISSAO_PROGRAMADOR }}
+          
+          # ------ CLINT ------
+          CLINT_WEBHOOK_URL=${{ vars.CLINT_WEBHOOK_URL }}
+          CLINT_PERDIDO_WEBHOOK_URL=${{ secrets.CLINT_PERDIDO_WEBHOOK_URL }}
+          
+          # ------ Asaas ------
+          ASAAS_TOKEN=${{ secrets.ASAAS_TOKEN }}
+          
+          # ------ Memberkit ------
+          MEMBERKIT_API_KEY=${{ secrets.MEMBERKIT_API_KEY }}
+          MEMBERKIT_MEMBERSHIP_LEVEL_ID=${{ vars.MEMBERKIT_MEMBERSHIP_LEVEL_ID }}
+          MEMBERKIT_CLASSROOM_ID_COMECE_AQUI=${{ vars.MEMBERKIT_CLASSROOM_ID_COMECE_AQUI }}
+          MEMBERKIT_CLASSROOM_ID_JORNADA_DA_CLAREZA=${{ vars.MEMBERKIT_CLASSROOM_ID_JORNADA_DA_CLAREZA }}
+          MEMBERKIT_CLASSROOM_ID_JORNADA_DA_HABILIDADE=${{ vars.MEMBERKIT_CLASSROOM_ID_JORNADA_DA_HABILIDADE }}
+          MEMBERKIT_CLASSROOM_ID_JORNADA_DO_CONHECIMENTO_1=${{ vars.MEMBERKIT_CLASSROOM_ID_JORNADA_DO_CONHECIMENTO_1 }}
+          MEMBERKIT_CLASSROOM_ID_JORNADA_DO_CONHECIMENTO_2=${{ vars.MEMBERKIT_CLASSROOM_ID_JORNADA_DO_CONHECIMENTO_2 }}
+          MEMBERKIT_CLASSROOM_ID_JORNADA_DO_CONHECIMENTO_3=${{ vars.MEMBERKIT_CLASSROOM_ID_JORNADA_DO_CONHECIMENTO_3 }}
+          MEMBERKIT_CLASSROOM_ID_JORNADA_DO_CONHECIMENTO_4=${{ vars.MEMBERKIT_CLASSROOM_ID_JORNADA_DO_CONHECIMENTO_4 }}
+          MEMBERKIT_CLASSROOM_ID_JORNADA_DO_CONHECIMENTO_5=${{ vars.MEMBERKIT_CLASSROOM_ID_JORNADA_DO_CONHECIMENTO_5 }}
+          MEMBERKIT_CLASSROOM_ID_JORNADA_DO_CONHECIMENTO_6=${{ vars.MEMBERKIT_CLASSROOM_ID_JORNADA_DO_CONHECIMENTO_6 }}
+          MEMBERKIT_LESSON_ID_JORNADA_DO_CONHECIMENTO=${{ vars.MEMBERKIT_LESSON_ID_JORNADA_DO_CONHECIMENTO }}
+          MEMBERKIT_COURSE_ID_COMECE_AQUI=${{ vars.MEMBERKIT_COURSE_ID_COMECE_AQUI }}
+          
+          # ------ Discord ------
+          DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }}
+          DISCORD_ID_CHANNEL=${{ vars.DISCORD_ID_CHANNEL }}
+          DISCORD_GUILD_ID=${{ secrets.DISCORD_GUILD_ID }}
+          DISCORD_ID_CANAL_VALIDACAO=${{ secrets.DISCORD_ID_CANAL_VALIDACAO }}
+          DISCORD_ID_CANAL_FALHA=${{ secrets.DISCORD_ID_CANAL_FALHA }}
+          DISCORD_ID_CANAL_INICIAR_VALIDACAO=${{ secrets.DISCORD_ID_CANAL_INICIAR_VALIDACAO }}
+          DISCORD_ID_CARGO_MEMBRO_VALIDADO=${{ secrets.DISCORD_ID_CARGO_MEMBRO_VALIDADO }}
+          DISCORD_ID_CARGO_DEFAULT=${{ secrets.DISCORD_ID_CARGO_DEFAULT }}
+          DISCORD_ID_CARGO_WAKANDER=${{ secrets.DISCORD_ID_CARGO_WAKANDER }}
+          DISCORD_ID_CARGO_FALHA=${{ secrets.DISCORD_ID_CARGO_FALHA }}  
+          DISCORD_ID_CARGO_CANCELADO=${{ secrets.DISCORD_ID_CARGO_CANCELADO }}          
+
+          # ------ Wakander ------
+          WAKANDER_INATIVIDADE_DIAS=${{ vars.WAKANDER_INATIVIDADE_DIAS }}
+          
+          # ------ Autenticacao ------
+          TOKEN_TEMPO_EXPIRACAO_CADASTRO=${{ vars.TOKEN_TEMPO_EXPIRACAO_CADASTRO }}
+          
+          # ------ Security token ------
+          SECURITY_JWT_EXPIRATION_EM_HORAS=${{ secrets.SECURITY_JWT_EXPIRATION_EM_HORAS }}
+          SECURITY_JWT_SECRET=${{ secrets.SECURITY_JWT_SECRET }}
+          TOKEN_TEMPO_EXPIRACAO_DADOS_COMPLEMENTARES=${{ secrets.TOKEN_TEMPO_EXPIRACAO_DADOS_COMPLEMENTARES }}
+          
+          # ------ Gamificacao Wakanda ------
+          WAKANDA_IMPORTACAO_JORNADA=${{ secrets.WAKANDA_IMPORTACAO_JORNADA }}
+          WAKANDA_IMPORTACAO_TIPO_MISSAO=${{ secrets.WAKANDA_IMPORTACAO_TIPO_MISSAO }}
+          N8N_WEBHOOK=${{ vars.N8N_WEBHOOK }}
+          FOO=bar
+          BAR=baz
+          EOF
+
+      - name: Copy files to EC2
+        uses: appleboy/scp-action@v1
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          port: 22
+          source: "./docker-compose.prod.yml,.env.prod"
+          target: "~/actions-runner"
+
+      - name: Deploy to production EC2
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          envs: GITHUB_REPOSITORY,WAKANDA_AI_PORT,HEALTH_URL
+          port: 22
+          script: |
+            set -e
+            
+            cd ~/actions-runner
+            
+            echo "Logging into GHCR"
+            echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+            echo "Downloading the new image"
+            docker compose --env-file .env.prod -f docker-compose.prod.yml pull
+            
+            echo "Bringing up the stack"
+            docker compose --env-file .env.prod -f docker-compose.prod.yml up -d --remove-orphans --wait --wait-timeout 240
+            
+            echo "Cleaning up old images"
+            docker image prune -f
+            
+            echo "Deployment completed successfully."

@@ -1,0 +1,2 @@
+ALTER TABLE autenticacao
+ALTER COLUMN token TYPE VARCHAR(128);

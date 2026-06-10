@@ -1,0 +1,1 @@
+ALTER TABLE trilha_wakanda ADD CONSTRAINT nome_unique UNIQUE (nome);

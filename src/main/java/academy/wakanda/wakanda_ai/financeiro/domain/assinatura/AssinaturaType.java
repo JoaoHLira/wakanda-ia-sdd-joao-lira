@@ -1,0 +1,10 @@
+package academy.wakanda.wakanda_ai.financeiro.domain.assinatura;
+
+public enum AssinaturaType {
+    SUBSCRIPTION_CREATED,
+    SUBSCRIPTION_DELETED,
+    SUBSCRIPTION_UPDATED,
+    SUBSCRIPTION_INACTIVATED,
+    SUBSCRIPTION_SPLIT_DIVERGENCE_BLOCK,
+    SUBSCRIPTION_SPLIT_DIVERGENCE_BLOCK_FINISHED;
+}

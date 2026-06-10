@@ -1,0 +1,35 @@
+services:
+  postgres_container:
+    image: postgres:17
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: wakandaaidb
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  localstack:
+    image: localstack/localstack:4.14.0
+    ports:
+      - "4566:4566"
+    environment:
+      - SERVICES=sns,sqs
+      - DEBUG=1
+    volumes:
+      - localstack_data:/var/lib/localstack
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  wiremock:
+    image: wiremock/wiremock:3.13.2
+    ports:
+      - "8181:8080"
+    volumes:
+      - ./src/main/resources/wiremock/__files:/home/wiremock/__files
+      - ./src/main/resources/wiremock/mappings:/home/wiremock/mappings
+    entrypoint: [ "/docker-entrypoint.sh", "--global-response-templating", "--disable-gzip", "--verbose" ]
+
+volumes:
+  postgres_data:
+  localstack_data:

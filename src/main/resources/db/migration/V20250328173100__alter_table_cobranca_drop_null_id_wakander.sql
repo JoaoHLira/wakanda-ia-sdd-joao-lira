@@ -1,0 +1,2 @@
+ALTER TABLE cobranca 
+	ALTER COLUMN id_wakander DROP NOT NULL;

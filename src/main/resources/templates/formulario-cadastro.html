@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro Wakander</title>
+    <link rel="stylesheet" href="/css/formulario-cadastro-style.css" th:href="@{/css/formulario-cadastro-style.css}">
+    <link rel="shortcut icon" href="/imagens/logoWakanda.ico" type="image/x-icon" th:href="@{/imagens/logoWakanda.ico}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.min.css">
+</head>
+<body>
+<div class="form-container">
+    <form id="wakander-form">
+        <div class="form-section">
+            <h3>Dados do Fiador</h3>
+            <div class="form-group">
+                <label for="guarantor-name">Nome completo</label>
+                <input type="text" placeholder="Nome completo" id="guarantor-name" th:value="${nomeFiador}"
+                       class="read-only-field" readonly>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="guarantor-cpf">CPF</label>
+                    <input type="text" placeholder="CPF" id="guarantor-cpf" th:value="${cpfFiador}"
+                           class="read-only-field" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="guarantor-phone">WhatsApp</label>
+                    <input type="tel" placeholder="WhatsApp" id="guarantor-phone" th:value="${whatsappFiador}"
+                           class="read-only-field" readonly>
+                </div>
+            </div>
+        </div>
+
+        <div class="toggle-container">
+            <label>Fiador é o estudante?</label>
+            <label class="switch">
+                <input type="checkbox" id="autofill-toggle">
+                <span class="slider round"></span>
+            </label>
+        </div>
+
+        <div class="undo-banner" id="undo-banner">
+            <span>Dados copiados automaticamente do fiador.</span>
+            <button type="button" id="undo-autofill">Desfazer</button>
+        </div>
+
+        <div class="form-section">
+            <h3>Dados do Estudante Wakander</h3>
+            <div class="form-group">
+                <label for="student-name">Nome completo</label>
+                <input type="text" placeholder="Nome completo" id="student-name" required>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="student-cpf">CPF</label>
+                    <input type="text" placeholder="000.000.000-00" id="student-cpf" name="cpf" maxlength="14"
+                           title="CPF deve ter 11 números" required>
+                    <span id="cpf-error-message" class="input-error-message"></span>
+                </div>
+                <div class="form-group">
+                    <label for="data-nascimento">Data de Nascimento</label>
+                    <input type="date" id="data-nascimento" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="student-email">E-mail</label>
+                    <input type="email" placeholder="E-mail" id="student-email" required>
+                </div>
+                <div class="form-group">
+                    <label for="student-phone">WhatsApp</label>
+                    <input type="tel" placeholder="DDD + Número" id="student-phone"
+                           name="whatsapp" required>
+                    <span class="input-error-message">Número de WhatsApp inválido ou incompleto.</span>
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" id="submit-btn">Enviar Cadastro</button>
+    </form>
+</div>
+<div class="welcome-container">
+    <h2>Seja Bem-vindo à Wakanda!</h2>
+    <p>O seu futuro como desenvolvedor de ponta começa aqui. Preencha seus dados para dar o próximo passo na sua
+        jornada.</p>
+    <img th:src="@{/imagens/Vinicius.png}" alt="Vinicius" class="vinicius-image">
+</div>
+
+<div id="cpf-ja-cadastrado" class="cpf-ja-cadastrado">
+    <h2>CPF já cadastrado!</h2>
+    <p>Se você precisa de ajuda, clique no botão abaixo para falar com o suporte.</p>
+    <a href="https://wa.me/5573999206450?text=Olá,%20meu%20CPF%20já%20está%20cadastrado%20na%20Wakanda%20e%20preciso%20de%20ajuda!"
+       target="_blank" class="btn-suporte">Falar com o Suporte</a>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js"></script>
+<script src="/js/cadastro-wakander.js" th:src="@{/js/cadastro-wakander.js}"></script>
+</body>
+</html>

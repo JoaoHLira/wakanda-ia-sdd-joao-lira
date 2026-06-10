@@ -1,0 +1,1856 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "API Wakanda-ai",
+    "description": "API responsável pela automação de processos, proporcionando uma experiência eficiente e automatizada.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080/wakanda-ai/api",
+      "description": "Generated server url"
+    }
+  ],
+  "tags": [
+    {
+      "name": "WakanderAPI",
+      "description": "Controle responsavel pelas operações do wakander."
+    },
+    {
+      "name": "JornadaWakanderAPI",
+      "description": "Controle responsavel pela jornada do wakander."
+    },
+    {
+      "name": "AssinaturaAPI",
+      "description": "Controle responsavel pela Assinatura do wakander."
+    },
+    {
+      "name": "ComunicacaoAPI",
+      "description": "Controle responsável pelas operações de comunicação, incluindo o envio de mensagens via WhatsApp."
+    },
+    {
+      "name": "CobrancaAPI",
+      "description": "Controle responsavel pelo financeiro do wakander."
+    }
+  ],
+  "paths": {
+    "/whatsapp-message/envia": {
+      "post": {
+        "tags": [
+          "ComunicacaoAPI"
+        ],
+        "summary": "Envia uma mensagem pelo WhatsApp",
+        "description": "Este método permite enviar uma mensagem utilizando um número de WhatsApp válido",
+        "operationId": "postMensagem",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MensagemRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "Erro de validação nos campos de entrada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorApiResponse"
+                },
+                "example": {
+                  "whatsapp": "O número do WhatsApp não pode estar vazio",
+                  "mensagem": "A mensagem não pode estar vazia"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR",
+            "content": {
+              "application/json": {
+                "example": {
+                  "description": "INTERNAL SERVER ERROR!",
+                  "message": "POR FAVOR INFORME AO ADMINISTRADOR DO SISTEMA!"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "Mensagem enviada com sucesso"
+          }
+        }
+      }
+    },
+    "/wakander/novo-wakander": {
+      "post": {
+        "tags": [
+          "WakanderAPI"
+        ],
+        "summary": "Cria um novo Wakander",
+        "description": "Este método permite criar um novo Wakander no sistema",
+        "operationId": "postNovoWakander",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WakanderNovoRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "Erro de validação nos campos de entrada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorApiResponse"
+                },
+                "example": {
+                  "nome": "O nome não pode estar vazio.",
+                  "cpf": "O CPF informado é inválido.",
+                  "message": "O CPF deve ter 11 dígitos numéricos, sem espaços, pontos ou hífen, apenas os números.",
+                  "idMemberKit": "O ID do Kit de Membro não pode estar vazio.",
+                  "whatsapp": "O número de WhatsApp deve ter entre 13 e 15 dígitos numéricos, sem espaços, hífen ou sinal de mais, apenas os números.",
+                  "email": "O email não pode estar vazio.",
+                  "IdPaymentAsaas": "O Payment ID do Asaas não pode estar vazio.",
+                  "idAsaasFiador": "O ID do fiador no Asaas não pode estar vazio.",
+                  "idAssinaturaFiador": "O ID da assinatura do fiador no Asaas não pode estar vazio.",
+                  "nomeFiador": "O nome do fiador não pode estar vazio.",
+                  "cpfFiador": "O CPF do fiador informado é inválido.",
+                  "telefoneFiador": "O número de telefone do fiador não pode estar vazio."
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Existem dados duplicados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorApiResponse"
+                },
+                "example": {
+                  "message": "Existem dados duplicados"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Wakander criado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WakanderCriadoResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR",
+            "content": {
+              "application/json": {
+                "example": {
+                  "description": "INTERNAL SERVER ERROR!",
+                  "message": "POR FAVOR INFORME AO ADMINISTRADOR DO SISTEMA!"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/wakander/jornada/registra": {
+      "post": {
+        "tags": [
+          "JornadaWakanderAPI"
+        ],
+        "summary": "Registra uma aula assistida",
+        "description": "Este método registra uma aula como assistida por um Wakander no sistema",
+        "operationId": "postRegistraAulaAssistidaWakander",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AulaMemberKitDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "mensagem qualquer."
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Aula registrada com sucesso",
+            "content": {
+              "application/json": {
+
+              }
+            }
+          },
+          "404": {
+            "description": "Wakander não encontrado",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Não há Wakander cadastrado com esse ID MemberKit!"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR",
+            "content": {
+              "application/json": {
+                "example": {
+                  "description": "INTERNAL SERVER ERROR!",
+                  "message": "POR FAVOR INFORME AO ADMINISTRADOR DO SISTEMA!"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/wakander/jornada/publica-mensagem": {
+      "post": {
+        "tags": [
+          "JornadaWakanderAPI"
+        ],
+        "summary": "Envia uma mensagem pelo WhatsApp",
+        "description": "Este método permite enviar uma mensagem utilizando um número de WhatsApp válido",
+        "operationId": "postPublicaMensagem",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NotificacaoRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "mensagem qualquer."
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR",
+            "content": {
+              "application/json": {
+                "example": {
+                  "description": "INTERNAL SERVER ERROR!",
+                  "message": "POR FAVOR INFORME AO ADMINISTRADOR DO SISTEMA!"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "Mensagem enviada com sucesso"
+          },
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/financeiro/cobranca/processa-evento": {
+      "post": {
+        "tags": [
+          "CobrancaAPI"
+        ],
+        "operationId": "processaEvento",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CobrancaAsaasDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
+    },
+    "/financeiro/assinatura": {
+      "post": {
+        "tags": [
+          "AssinaturaAPI"
+        ],
+        "operationId": "processaEventoDeAssinatura",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AssinaturaAsaasDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
+    },
+    "/wakander/{idWakander}/regulariza": {
+      "patch": {
+        "tags": [
+          "WakanderAPI"
+        ],
+        "summary": "Regulariza o status financeiro de um Wakander",
+        "description": "Este método permite regularizar o status financeiro de um Wakander pelo seu ID",
+        "operationId": "patchRegularizaWakander",
+        "parameters": [
+          {
+            "name": "idWakander",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "mensagem qualquer."
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "O status financeiro já está regular",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "O status financeiro do Wakander já está regular."
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "Status financeiro do Wakander regularizado com sucesso"
+          },
+          "404": {
+            "description": "Wakander não encontrado",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Wakander não encontrado!"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR",
+            "content": {
+              "application/json": {
+                "example": {
+                  "description": "INTERNAL SERVER ERROR!",
+                  "message": "POR FAVOR INFORME AO ADMINISTRADOR DO SISTEMA!"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/wakander/{idWakander}/progresso/vibraniun": {
+      "patch": {
+        "tags": [
+          "WakanderAPI"
+        ],
+        "summary": "Gerencia a jornada de um Wakander",
+        "description": "Este método permite gerenciar a jornada de um Wakander",
+        "operationId": "patchAtualizaProgressoParaVibraniun",
+        "parameters": [
+          {
+            "name": "idWakander",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Wakander não está regular",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Wakander não está regularizado!"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflito de dados",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Wakander já está nessa jornada da wakanda!"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR",
+            "content": {
+              "application/json": {
+                "example": {
+                  "description": "INTERNAL SERVER ERROR!",
+                  "message": "POR FAVOR INFORME AO ADMINISTRADOR DO SISTEMA!"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
+    },
+    "/wakander/{idWakander}/progresso/jornada-habilidade": {
+      "patch": {
+        "tags": [
+          "WakanderAPI"
+        ],
+        "summary": "Gerencia a jornada de um Wakander",
+        "description": "Este método permite gerenciar a jornada de um Wakander",
+        "operationId": "patchAtualizaProgressoParaJornadaHabilidade",
+        "parameters": [
+          {
+            "name": "idWakander",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Wakander não está regular",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Wakander não está regularizado!"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflito de dados",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Wakander já está nessa jornada da wakanda!"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR",
+            "content": {
+              "application/json": {
+                "example": {
+                  "description": "INTERNAL SERVER ERROR!",
+                  "message": "POR FAVOR INFORME AO ADMINISTRADOR DO SISTEMA!"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
+    },
+    "/wakander/{idWakander}/progresso/jornada-conquista": {
+      "patch": {
+        "tags": [
+          "WakanderAPI"
+        ],
+        "summary": "Gerencia a jornada de um Wakander",
+        "description": "Este método permite gerenciar a jornada de um Wakander",
+        "operationId": "patchAtualizaProgressoParaJornadaConquista",
+        "parameters": [
+          {
+            "name": "idWakander",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Wakander não está regular",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Wakander não está regularizado!"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflito de dados",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Wakander já está nessa jornada da wakanda!"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR",
+            "content": {
+              "application/json": {
+                "example": {
+                  "description": "INTERNAL SERVER ERROR!",
+                  "message": "POR FAVOR INFORME AO ADMINISTRADOR DO SISTEMA!"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
+    },
+    "/wakander/{idWakander}/progresso/jornada-conhecimento": {
+      "patch": {
+        "tags": [
+          "WakanderAPI"
+        ],
+        "summary": "Gerencia a jornada de um Wakander",
+        "description": "Este método permite gerenciar a jornada de um Wakander",
+        "operationId": "patchAtualizaProgressoParaJornadaConhecimento",
+        "parameters": [
+          {
+            "name": "idWakander",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Wakander não está regular",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Wakander não está regularizado!"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflito de dados",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Wakander já está nessa jornada da wakanda!"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR",
+            "content": {
+              "application/json": {
+                "example": {
+                  "description": "INTERNAL SERVER ERROR!",
+                  "message": "POR FAVOR INFORME AO ADMINISTRADOR DO SISTEMA!"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
+    },
+    "/wakander/{idWakander}/edita-wakander": {
+      "patch": {
+        "tags": [
+          "WakanderAPI"
+        ],
+        "summary": "Edita os dados de um Wakander",
+        "description": "Este método edita os dados de um Wakander com base no seu ID.",
+        "operationId": "patchEditaWakander",
+        "parameters": [
+          {
+            "name": "idWakander",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WakanderAlteracaoRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Dados inválidos."
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR",
+            "content": {
+              "application/json": {
+                "example": {
+                  "description": "INTERNAL SERVER ERROR!",
+                  "message": "Por favor, informe ao administrador do sistema!"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "Wakander editado com sucesso."
+          },
+          "404": {
+            "description": "Wakander não encontrado",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Wakander não encontrado!"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/wakander/{idWakander}/cancela-assinatura": {
+      "patch": {
+        "tags": [
+          "WakanderAPI"
+        ],
+        "operationId": "patchCancelaAssinatura",
+        "parameters": [
+          {
+            "name": "idWakander",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WakanderCancelaAssinaturaDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
+    },
+    "/wakander/cadastro": {
+      "patch": {
+        "tags": [
+          "WakanderAPI"
+        ],
+        "summary": "Completa cadastro de um Wakander",
+        "description": "Este método completa o cadastro de um Wakander.",
+        "operationId": "completaCadastro",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WakanderCadastroCompleto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "example": {
+                  "email": "O email deve ser válido.",
+                  "cpf": "O CPF informado é inválido."
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR",
+            "content": {
+              "application/json": {
+                "example": {
+                  "description": "INTERNAL SERVER ERROR!",
+                  "message": "Por favor, informe ao administrador do sistema!"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "Wakander editado com sucesso."
+          },
+          "404": {
+            "description": "Wakander não encontrado",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Wakander não encontrado!"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/wakander/{idWakander}": {
+      "get": {
+        "tags": [
+          "WakanderAPI"
+        ],
+        "summary": "Busca um Wakander por ID",
+        "description": "Este método busca um Wakander pelo seu ID",
+        "operationId": "getWakanderPorId",
+        "parameters": [
+          {
+            "name": "idWakander",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "mensagem qualquer."
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Wakander encontrado com sucesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WakanderDetalhadoResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Wakander não encontrado",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Wakander não encontrado!"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR",
+            "content": {
+              "application/json": {
+                "example": {
+                  "description": "INTERNAL SERVER ERROR!",
+                  "message": "POR FAVOR INFORME AO ADMINISTRADOR DO SISTEMA!"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health-check": {
+      "get": {
+        "tags": [
+          "wakanda-ai-application"
+        ],
+        "operationId": "healthCheck",
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "MensagemRequest": {
+        "required": [
+          "mensagem",
+          "whatsapp"
+        ],
+        "type": "object",
+        "properties": {
+          "whatsapp": {
+            "type": "string",
+            "description": "Número do WhatsApp para envio",
+            "example": "5511987654321"
+          },
+          "mensagem": {
+            "type": "string",
+            "description": "Conteúdo da mensagem a ser enviada",
+            "example": "Olá, esta é uma mensagem de teste!"
+          }
+        },
+        "description": "Informações para envio de mensagem via WhatsApp"
+      },
+      "ErrorApiResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Mensagem de erro detalhada",
+            "example": "Por favor, verifique os dados fornecidos e tente novamente."
+          },
+          "description": {
+            "type": "string",
+            "description": "Descrição do erro",
+            "example": "Erro na solicitação"
+          }
+        },
+        "description": "Detalhes do erro da API"
+      },
+      "WakanderNovoRequest": {
+        "required": [
+          "cpf",
+          "cpfFiador",
+          "email",
+          "idAsaasFiador",
+          "idAssinaturaFiador",
+          "idMemberKit",
+          "nome",
+          "nomeFiador",
+          "telefoneFiador",
+          "whatsapp"
+        ],
+        "type": "object",
+        "properties": {
+          "nome": {
+            "type": "string",
+            "description": "Nome do Wakander",
+            "example": "Nome do Wakander"
+          },
+          "cpf": {
+            "pattern": "^\\d{11}$",
+            "type": "string",
+            "description": "CPF do Wakander",
+            "example": "12345678912"
+          },
+          "idMemberKit": {
+            "type": "string",
+            "description": "ID do kit de membro",
+            "example": "12345678"
+          },
+          "whatsapp": {
+            "pattern": "^\\d{13,15}$",
+            "type": "string",
+            "description": "Número de WhatsApp",
+            "example": "5573900000000"
+          },
+          "email": {
+            "type": "string",
+            "description": "Email do Wakander",
+            "example": "exemplo@wakanda.com"
+          },
+          "idAsaasFiador": {
+            "type": "string",
+            "description": "ID do fiador no Asaas",
+            "example": "cus_G7Dvo4iphUNk"
+          },
+          "idAssinaturaFiador": {
+            "type": "string",
+            "description": "ID da assinatura do fiador no Asaas",
+            "example": "sub_VXJBYgP2u0eO"
+          },
+          "nomeFiador": {
+            "type": "string",
+            "description": "Nome do fiador",
+            "example": "Maria Silva dos Santos"
+          },
+          "cpfFiador": {
+            "pattern": "^\\d{11}$",
+            "type": "string",
+            "description": "CPF do fiador",
+            "example": "012345678901"
+          },
+          "telefoneFiador": {
+            "pattern": "^\\d{13,15}$",
+            "type": "string",
+            "description": "Número de telefone do fiador",
+            "example": "5573900000000"
+          }
+        },
+        "description": "Informações para criação de um novo Wakander"
+      },
+      "WakanderCriadoResponse": {
+        "type": "object",
+        "properties": {
+          "idWakander": {
+            "type": "string",
+            "description": "ID único do Wakander criado",
+            "format": "uuid",
+            "example": "550e8400-e29b-41d4-a716-446655440000"
+          }
+        },
+        "description": "Response do Wakander criado"
+      },
+      "AulaMemberKitDTO": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "Tipo de status",
+            "example": "lesson_status.saved"
+          },
+          "data": {
+            "$ref": "#/components/schemas/Data"
+          }
+        },
+        "description": "Representação dos dados para registrar uma aula assistida pelo Wakander."
+      },
+      "Category": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "position": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "Course": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Identificador único do curso ao qual a aula pertence.",
+            "format": "int64",
+            "example": 101
+          },
+          "name": {
+            "type": "string"
+          },
+          "position": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "description": {
+            "type": "string"
+          },
+          "page_checkout_url": {
+            "type": "string"
+          },
+          "image_url": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "category": {
+            "$ref": "#/components/schemas/Category"
+          }
+        }
+      },
+      "Data": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "progress": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "completed_at": {
+            "type": "string",
+            "description": "Data e hora em que a aula foi concluída.",
+            "format": "date-time",
+            "example": "2025-01-07T14:30:00Z"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "user": {
+            "$ref": "#/components/schemas/User"
+          },
+          "course": {
+            "$ref": "#/components/schemas/Course"
+          },
+          "lesson": {
+            "$ref": "#/components/schemas/Lesson"
+          }
+        }
+      },
+      "Lesson": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Identificador único da aula assistida.",
+            "format": "int64",
+            "example": 202
+          },
+          "slug": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "position": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Identificador único do Wakander que assistiu à aula.",
+            "example": "01234567"
+          },
+          "full_name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "sign_in_count": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "current_sign_in_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "last_seen_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "profile_image_url": {
+            "type": "string"
+          },
+          "metadata": {
+            "type": "object"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "NotificacaoRequest": {
+        "type": "object",
+        "properties": {
+          "groupId": {
+            "type": "string",
+            "description": "Identificador do grupo relacionado à mensagem.",
+            "example": "123456"
+          },
+          "message": {
+            "type": "string",
+            "description": "Conteúdo da mensagem a ser publicada.",
+            "example": "Olá, esta é uma mensagem de teste!"
+          }
+        },
+        "description": "Informações para publicação de uma mensagem no SNS."
+      },
+      "Chargeback": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string"
+          },
+          "reason": {
+            "type": "string"
+          }
+        }
+      },
+      "CobrancaAsaasDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "event": {
+            "type": "string"
+          },
+          "dateCreated": {
+            "type": "string"
+          },
+          "payment": {
+            "$ref": "#/components/schemas/Payment"
+          }
+        }
+      },
+      "CreditCard": {
+        "type": "object",
+        "properties": {
+          "creditCardNumber": {
+            "type": "string"
+          },
+          "creditCardBrand": {
+            "type": "string"
+          },
+          "creditCardToken": {
+            "type": "string"
+          }
+        }
+      },
+      "Discount": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "number"
+          },
+          "dueDateLimitDays": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "limitedDate": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          }
+        }
+      },
+      "Fine": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "number"
+          },
+          "type": {
+            "type": "string"
+          }
+        }
+      },
+      "Interest": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "number"
+          },
+          "type": {
+            "type": "string"
+          }
+        }
+      },
+      "Payment": {
+        "type": "object",
+        "properties": {
+          "object": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "dateCreated": {
+            "type": "string",
+            "format": "date"
+          },
+          "customer": {
+            "type": "string"
+          },
+          "subscription": {
+            "type": "string"
+          },
+          "installment": {
+            "type": "string"
+          },
+          "paymentLink": {
+            "type": "string"
+          },
+          "dueDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "originalDueDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "value": {
+            "type": "number"
+          },
+          "netValue": {
+            "type": "number"
+          },
+          "originalValue": {
+            "type": "number"
+          },
+          "interestValue": {
+            "type": "number"
+          },
+          "nossoNumero": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "externalReference": {
+            "type": "string"
+          },
+          "billingType": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "pixTransaction": {
+            "type": "string"
+          },
+          "confirmedDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "paymentDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "clientPaymentDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "installmentNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "creditDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "custody": {
+            "type": "string"
+          },
+          "estimatedCreditDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "invoiceUrl": {
+            "type": "string"
+          },
+          "bankSlipUrl": {
+            "type": "string"
+          },
+          "transactionReceiptUrl": {
+            "type": "string"
+          },
+          "invoiceNumber": {
+            "type": "string"
+          },
+          "deleted": {
+            "type": "boolean"
+          },
+          "anticipated": {
+            "type": "boolean"
+          },
+          "anticipable": {
+            "type": "boolean"
+          },
+          "lastInvoiceViewedDate": {
+            "type": "string"
+          },
+          "lastBankSlipViewedDate": {
+            "type": "string"
+          },
+          "postalService": {
+            "type": "boolean"
+          },
+          "creditCard": {
+            "$ref": "#/components/schemas/CreditCard"
+          },
+          "discount": {
+            "$ref": "#/components/schemas/Discount"
+          },
+          "fine": {
+            "$ref": "#/components/schemas/Fine"
+          },
+          "interest": {
+            "$ref": "#/components/schemas/Interest"
+          },
+          "split": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Split"
+            }
+          },
+          "chargeback": {
+            "$ref": "#/components/schemas/Chargeback"
+          },
+          "refunds": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Refund"
+            }
+          }
+        }
+      },
+      "Refund": {
+        "type": "object",
+        "properties": {
+          "dateCreated": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "value": {
+            "type": "number"
+          },
+          "endToEndIdentifier": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "effectiveDate": {
+            "type": "string"
+          },
+          "transactionReceiptUrl": {
+            "type": "string"
+          },
+          "refundedSplits": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RefundedSplit"
+            }
+          }
+        }
+      },
+      "RefundedSplit": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "value": {
+            "type": "number"
+          },
+          "done": {
+            "type": "boolean"
+          }
+        }
+      },
+      "Split": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "walletId": {
+            "type": "string"
+          },
+          "fixedValue": {
+            "type": "number"
+          },
+          "percentualValue": {
+            "type": "number"
+          },
+          "status": {
+            "type": "string"
+          },
+          "refusalReason": {
+            "type": "string"
+          },
+          "externalReference": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "AssinaturaAsaasDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "event": {
+            "type": "string"
+          },
+          "dateCreated": {
+            "type": "string"
+          },
+          "subscription": {
+            "$ref": "#/components/schemas/SubscriptionDTO"
+          }
+        }
+      },
+      "DiscountDTO": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "number"
+          },
+          "limitDate": {
+            "type": "string"
+          },
+          "dueDateLimitDays": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "type": {
+            "type": "string"
+          }
+        }
+      },
+      "FineDTO": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "number"
+          },
+          "type": {
+            "type": "string"
+          }
+        }
+      },
+      "InterestDTO": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "number"
+          },
+          "type": {
+            "type": "string"
+          }
+        }
+      },
+      "SplitDTO": {
+        "type": "object",
+        "properties": {
+          "walletId": {
+            "type": "string"
+          },
+          "fixedValue": {
+            "type": "number"
+          },
+          "percentualValue": {
+            "type": "number"
+          },
+          "externalReference": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "SubscriptionDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "dateCreated": {
+            "type": "string"
+          },
+          "customer": {
+            "type": "string"
+          },
+          "paymentLink": {
+            "type": "string"
+          },
+          "value": {
+            "type": "number"
+          },
+          "nextDueDate": {
+            "type": "string"
+          },
+          "cycle": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "billingType": {
+            "type": "string"
+          },
+          "deleted": {
+            "type": "boolean"
+          },
+          "status": {
+            "type": "string"
+          },
+          "externalReference": {
+            "type": "string"
+          },
+          "sendPaymentByPostalService": {
+            "type": "boolean"
+          },
+          "discount": {
+            "$ref": "#/components/schemas/DiscountDTO"
+          },
+          "fine": {
+            "$ref": "#/components/schemas/FineDTO"
+          },
+          "interest": {
+            "$ref": "#/components/schemas/InterestDTO"
+          },
+          "split": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SplitDTO"
+            }
+          },
+          "object": {
+            "type": "string"
+          }
+        }
+      },
+      "WakanderAlteracaoRequest": {
+        "required": [
+          "nome"
+        ],
+        "type": "object",
+        "properties": {
+          "nome": {
+            "type": "string"
+          },
+          "cpf": {
+            "type": "string"
+          },
+          "contato": {
+            "$ref": "#/components/schemas/WakanderContatoAlteracaoRequest"
+          }
+        }
+      },
+      "WakanderContatoAlteracaoRequest": {
+        "required": [
+          "whatsapp"
+        ],
+        "type": "object",
+        "properties": {
+          "whatsapp": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          }
+        }
+      },
+      "WakanderCancelaAssinaturaDTO": {
+        "required": [
+          "dataCancelamento",
+          "motivoCancelamento"
+        ],
+        "type": "object",
+        "properties": {
+          "motivoCancelamento": {
+            "type": "string"
+          },
+          "dataCancelamento": {
+            "pattern": "^\\d{2}/\\d{2}/\\d{4}$",
+            "type": "string"
+          }
+        }
+      },
+      "WakanderCadastroCompleto": {
+        "type": "object",
+        "properties": {
+          "nomeFiador": {
+            "type": "string"
+          },
+          "idWakander": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "nome": {
+            "type": "string"
+          },
+          "cpf": {
+            "type": "string"
+          },
+          "idMemberKit": {
+            "type": "string"
+          },
+          "whatsapp": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          }
+        }
+      },
+      "WakanderContato": {
+        "type": "object",
+        "properties": {
+          "whatsapp": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          }
+        },
+        "description": "Informações de contato do Wakander"
+      },
+      "WakanderDetalhadoResponse": {
+        "type": "object",
+        "properties": {
+          "idWakander": {
+            "type": "string",
+            "description": "ID único do Wakander",
+            "format": "uuid",
+            "example": "550e8400-e29b-41d4-a716-446655440000"
+          },
+          "nome": {
+            "type": "string",
+            "description": "Nome do Wakander",
+            "example": "João Silva dos Santos"
+          },
+          "cpf": {
+            "type": "string",
+            "description": "CPF do Wakander",
+            "example": "63920752082"
+          },
+          "idMemberKit": {
+            "type": "string",
+            "description": "ID do kit de membro do Wakander",
+            "example": "12345678"
+          },
+          "statusCadastro": {
+            "type": "string",
+            "description": "Status do cadastro do Wakander",
+            "enum": [
+              "INCOMPLETO",
+              "COMPLETO"
+            ]
+          },
+          "jornadaAtual": {
+            "type": "string",
+            "description": "Informações da jornada atual do Wakander",
+            "enum": [
+              "JORNADA_CONHECIMENTO",
+              "JORNADA_HABILIDADE",
+              "JORNADA_CONQUISTA",
+              "VIBRANIUN"
+            ]
+          },
+          "contato": {
+            "$ref": "#/components/schemas/WakanderContato"
+          },
+          "financeiro": {
+            "$ref": "#/components/schemas/WakanderFinanceiro"
+          },
+          "fiador": {
+            "$ref": "#/components/schemas/WakanderFiador"
+          }
+        },
+        "description": "Informações detalhadas de um Wakander"
+      },
+      "WakanderFiador": {
+        "type": "object",
+        "properties": {
+          "idAsaas": {
+            "type": "string"
+          },
+          "idAssinatura": {
+            "type": "string"
+          },
+          "nome": {
+            "type": "string"
+          },
+          "cpf": {
+            "type": "string"
+          },
+          "telefone": {
+            "type": "string"
+          }
+        },
+        "description": "Informações do fiador do Wakander"
+      },
+      "WakanderFinanceiro": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "REGULAR",
+              "CANCELAMENTO_SOLICITADO",
+              "CANCELADO"
+            ]
+          },
+          "ultimaAtualizacao": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "motivoCancelamento": {
+            "type": "string"
+          }
+        },
+        "description": "Informações financeiras do Wakander"
+      }
+    }
+  }
+}

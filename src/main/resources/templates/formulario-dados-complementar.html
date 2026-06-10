@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro Wakander</title>
+    <link rel="stylesheet" href="../static/css/formulario-dados-complementares.css" th:href="@{/css/formulario-dados-complementares.css}">
+    <link rel="stylesheet" href="../static/css/loading.css" th:href="@{/css/loading.css}">
+    <link rel="shortcut icon" href="/imagens/logoWakanda.ico" type="image/x-icon" th:href="@{/imagens/logoWakanda.ico}">
+</head>
+<body>
+
+    <div id="blackScreen">
+
+        <div class="loader"></div>
+
+        <div class="modal-result" id="modal-erro">
+            <img id="img-status" src="../static/imagens/Error.png" alt="ERRO" th:src="@{/imagens/Error.png}">
+            <div>
+                <h3 id="mensagemStatusErro"></h3>
+            </div>
+        </div>
+
+        <div class="modal-result" id="modal-sucess">
+            <img  src="../static/imagens/success.png" alt="ERRO" th:src="@{/imagens/success.png}">
+            <div>
+                <h3 id="mensagemStatusSucesso"></h3>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="form-container">
+        <div class="title-form"><h1>Complete o seu cadastro</h1></div>
+
+        <div id="wakanderForm" name="wakanderForm">
+            <div class="form-group">
+                <label for="nome">Nome Completo:</label>
+                <input type="text" id="nome" required placeholder="Ex: João da Silva">
+            </div>
+
+            <div class="form-group">
+                <label for="cpf">CPF:</label>
+                <input type="text" id="cpf" name="cpf" placeholder="Ex: 000.000.000-00" maxlength="14" required oninput="aplicarMascaraCpf(this)">
+            </div>
+
+            <div class="form-group">
+                <label for="data-nascimento">Data de Nascimento:</label>
+                <input type="date" id="data-nascimento" required>
+            </div>
+
+            <div class="form-group">
+                <label for="whatsapp">WhatsApp:</label>
+                <input type="tel" id="whatsapp" name="whatsapp" placeholder="Ex: +55 (99) 9 9999-9999" maxlength="20" required oninput="aplicarMascaraWhatsapp(this)" value="+55 ">
+            </div>
+
+            <div class="form-group">
+                <label for="email">E-mail:</label>
+                <input type="email" id="email" required placeholder="Ex: email@exemplo.com">
+            </div>
+
+            <button id="enviarFormulario">Enviar</button>
+
+            
+        </div>
+    </div>
+
+
+    <script src="../static/js/dados-complementar.js" th:src="@{/js/dados-complementar.js}"></script>
+    <script src="../static/js/envia-dados-complementar.js" th:src="@{/js/envia-dados-complementar.js}"></script>
+
+</body>
+</html>
+

@@ -1,0 +1,168 @@
+server:
+  servlet:
+    context-path: /wakanda-ai/api
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info
+  endpoint:
+    health:
+      show-details: always
+
+logging:
+  level:
+    academy.wakanda: ${LOG_LEVEL:DEBUG}
+
+spring:
+  profiles:
+    active: ${APP_PROFILE:local}
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: ${DATASOURCE_URL:jdbc:postgresql://localhost:5432/wakandaaidb?currentSchema=wakanda-ai}
+    username: ${DATASOURCE_USER:postgres}
+    password: ${DATASOURCE_PASS:postgres}
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      poolName: SpringBootJPAHikariCP
+      minimumIdle: 15
+      maximumPoolSize: 50
+      connectionTimeout: 30000
+      idleTimeout: 30000
+  cloud:
+    aws:
+      credentials:
+        access-key: ${AWS_ACCESS_KEY:test}
+        secret-key: ${AWS_SECRET_KEY:test}
+      sns:
+        region: ${AWS_SNS_REGION:us-east-1}
+      sqs:
+        region: ${AWS_SQS_REGION:us-east-1}
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    cache: false
+    mode: HTML
+    encoding: UTF-8
+    servlet:
+      content-type: text/html
+  web:
+    resources:
+      static-locations: classpath:/static/
+
+aws:
+  url: ${AWS_URL:http://localhost:8080}
+  topic:
+    teste: ${AWS_TOPIC_TESTE:teste-topic.fifo}
+    zapi-requests: ${AWS_TOPIC_ZAPI_REQUESTS:zapi-requests-topic.fifo}
+    memberkit-requests: ${AWS_TOPIC_MEMBERKIT_REQUESTS:memberkit-requests-topic.fifo}
+    asaas-requests: ${AWS_TOPIC_ASAAS_REQUESTS:asaas-requests-topic.fifo}
+    clint-contato-requests: ${AWS_TOPIC_CLINT_CONTATO_REQUESTS:clint-contato-requests-topic.fifo}
+    discord-request: ${AWS_TOPIC_DISCORD_REQUESTS:discord-requests-topic.fifo}
+    clint-requests: ${AWS_TOPIC_CLINT_REQUESTS:clint-requests-topic.fifo}
+    progresso-wakander-requests: ${AWS_TOPIC_PROGRESSO_WAKANDER_REQUESTS:progresso-wakander-requests-topic.fifo}
+    xp-wakander-requests: ${AWS_TOPIC_XP_WAKANDER_REQUESTS:xp-wakander-requests-topic.fifo}
+  queue:
+    teste: ${AWS_QUEUE_TESTE:teste-queue.fifo}
+    zapi-requests: ${AWS_QUEUE_ZAPI_REQUESTS:zapi-requests-queue.fifo}
+    zapi-requests-dlq: ${AWS_QUEUE_ZAPI_REQUESTS_DLQ:zapi-requests-queue-dlq.fifo}
+    zapi-requests-delay: ${AWS_QUEUE_ZAPI_REQUESTS_DELAY:zapi-requests-queue-delay}
+    zapi-requests-delay-dlq: ${AWS_QUEUE_ZAPI_REQUESTS_DELAY_DLQ:zapi-requests-queue-delay-dlq}
+    memberkit-requests: ${AWS_QUEUE_MEMBERKIT_REQUESTS:memberkit-requests-queue.fifo}
+    memberkit-requests-dlq: ${AWS_QUEUE_MEMBERKIT_REQUESTS_DLQ:memberkit-requests-queue-dlq.fifo}
+    asaas-requests: ${AWS_QUEUE_ASAAS_REQUESTS:asaas-requests-queue.fifo}
+    clint-contato-requests: ${AWS_QUEUE_CLINT_CONTATO_REQUESTS:clint-contato-requests-queue.fifo}
+    clint-contato-requests-dlq: ${AWS_QUEUE_CLINT_CONTATO_REQUESTS_DLQ:clint-contato-requests-dlq.fifo}
+    discord-request: ${AWS_QUEUE_DISCORD_REQUESTS:discord-requests-queue.fifo}
+    discord-dlq: ${AWS_QUEUE_DISCORD_REQUESTS_DLQ:discord-requests-queue-dlq.fifo}
+    clint-requests-dlq: ${AWS_QUEUE_CLINT_REQUESTS_DLQ:clint-requests-dlq.fifo}
+    clint-requests: ${AWS_QUEUE_CLINT_REQUESTS:clint-requests-queue.fifo}
+    progresso-wakander-requests: ${AWS_QUEUE_PROGRESSO_WAKANDER_REQUESTS:progresso-wakander-requests-queue.fifo}
+    progresso-wakander-requests-dlq: ${AWS_QUEUE_PROGRESSO_WAKANDER_REQUESTS_DLQ:progresso-wakander-requests-queue-dlq.fifo}
+    xp-wakander-requests-dlq: ${AWS_QUEUE_XP_WAKANDER_REQUEST_DLQ:xp-wakander-requests-queue-dlq.fifo}
+    xp-wakander-requests: ${AWS_QUEUE_XP_WAKANDER_REQUESTS:xp-wakander-requests-queue.fifo}
+
+z-api:
+  base-url: ${Z_API_BASE_URL:https://api.z-api.io}
+  instancia-id: ${Z_API_INSTANCIA_ID:1234567}
+  token-instancia: ${Z_API_TOKEN_INSTANCIA:1234567}
+  token-cliente: ${Z_API_TOKEN_CLIENTE:1234567}
+  phone-suporte: ${Z_API_PHONE_SUPORTE:1234567}
+  lideres-group-id: ${Z_API_GROUP_ID_LIDERES:1234567}
+  group-id-profissao-programador: ${Z_API_GROUP_ID_PROFISSAO_PROGRAMADOR:1234567}
+
+asaas:
+  url: https://api.asaas.com
+  token: ${ASAAS_TOKEN:123456789}
+
+memberkit:
+  url: https://memberkit.com.br
+  url-api: ${MEMBERKIT_URL:https://memberkit.com.br/api/v1}
+  api-key: ${MEMBERKIT_API_KEY:1234567}
+  url-memberkit-wakanda: https://wakanda-academy.memberkit.com.br
+  membership-level-id: ${MEMBERKIT_MEMBERSHIP_LEVEL_ID:1234567}
+  classroom-ids:
+    - ${MEMBERKIT_CLASSROOM_ID_COMECE_AQUI:12345}
+    - ${MEMBERKIT_CLASSROOM_ID_JORNADA_DA_CLAREZA:1234567}
+    - ${MEMBERKIT_CLASSROOM_ID_JORNADA_DA_HABILIDADE:1234567}
+    - ${MEMBERKIT_CLASSROOM_ID_JORNADA_DO_CONHECIMENTO_1:1234567}
+    - ${MEMBERKIT_CLASSROOM_ID_JORNADA_DO_CONHECIMENTO_2:1234567}
+    - ${MEMBERKIT_CLASSROOM_ID_JORNADA_DO_CONHECIMENTO_3:1234567}
+    - ${MEMBERKIT_CLASSROOM_ID_JORNADA_DO_CONHECIMENTO_4:1234567}
+    - ${MEMBERKIT_CLASSROOM_ID_JORNADA_DO_CONHECIMENTO_5:1234567}
+    - ${MEMBERKIT_CLASSROOM_ID_JORNADA_DO_CONHECIMENTO_6:1234567}
+  lesson:
+    id-primeira-aula-conhecimento: ${MEMBERKIT_LESSON_ID_JORNADA_DO_CONHECIMENTO:1234567}
+  Course:
+    id-comece-aqui: ${MEMBERKIT_COURSE_ID_COMECE_AQUI:1234567}
+
+discord:
+  api-url: https://discord.com
+  bot:
+    token: ${DISCORD_TOKEN:1234567}
+  guild-wakanda:
+    id: ${DISCORD_GUILD_ID:1234567}
+  channels:
+    id: ${DISCORD_ID_CHANNEL:1234567}
+    validacao: ${DISCORD_ID_CANAL_VALIDACAO:1234567}
+    falha: ${DISCORD_ID_CANAL_FALHA:1234567}
+    iniciar-validacao: ${DISCORD_ID_CANAL_INICIAR_VALIDACAO:1234567}
+  roles:
+    membro-validado: ${DISCORD_ID_CARGO_MEMBRO_VALIDADO:1234567}
+    default-role: ${DISCORD_ID_CARGO_DEFAULT:1234567}
+    wakander: ${DISCORD_ID_CARGO_WAKANDER:1234567}
+    falha: ${DISCORD_ID_CARGO_FALHA:1234567}
+    membro-cancelado: ${DISCORD_ID_CARGO_CANCELADO:1234567}
+
+wakander:
+  inatividade:
+    dias: ${WAKANDER_INATIVIDADE_DIAS:2}
+
+security:
+  token:
+    jwt:
+      expiration: ${SECURITY_JWT_EXPIRATION_EM_HORAS:8}
+      secret: ${SECURITY_JWT_SECRET:1234567abcdeABCDE!@#$%}
+
+autenticacao:
+  tempo-expiracao-cadastro: ${TOKEN_TEMPO_EXPIRACAO_CADASTRO:5}
+  tempo-expiracao-dados-complementares: ${TOKEN_TEMPO_EXPIRACAO_DADOS_COMPLEMENTARES:7200}
+
+clint:
+  contato: ${CLINT_WEBHOOK_URL:1234567}
+  perdido: ${CLINT_PERDIDO_WEBHOOK_URL:www.inva.com.br}
+
+wakanda:
+  importacao:
+    jornada: ${WAKANDA_IMPORTACAO_JORNADA:Jornada do Conhecimento}
+    tipo-missao: ${WAKANDA_IMPORTACAO_TIPO_MISSAO:Aula}
+
+n8n:
+  webhook: ${N8N_WEBHOOK:https://webhook.123.com}
+
+  

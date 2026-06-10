@@ -1,0 +1,2 @@
+ALTER TABLE missao_wakanda
+ADD COLUMN processamento_status VARCHAR(20) NOT NULL DEFAULT 'EM_PROCESSO';

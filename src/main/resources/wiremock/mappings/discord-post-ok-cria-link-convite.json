@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "POST",
+    "urlPathPattern": "/stub/discord/api/v10/channels/[^/]+/invites",
+    "bodyPatterns": [
+      {
+        "matchesJsonPath": "$"
+      }
+    ]
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "discord-post-ok-cria-link-convite.json",
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

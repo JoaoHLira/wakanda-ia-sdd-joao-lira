@@ -1,0 +1,1 @@
+ALTER TABLE wakander ADD CONSTRAINT id_member_kit_unique UNIQUE (id_member_kit);

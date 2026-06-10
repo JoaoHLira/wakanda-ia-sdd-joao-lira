@@ -1,0 +1,19 @@
+# ATENÇÃO!
+# Este arquivo é essencial para o deploy da aplicação,
+# qualquer alteração feita aqui irá impactar diretamente no funcionamento do CI/CD e da aplicação em produção.
+services:
+  wakanda-ai:
+    container_name: wakanda-ai
+    image: ghcr.io/${GITHUB_REPOSITORY}:latest
+    env_file:
+      - .env.prod
+    ports:
+      - "${WAKANDA_AI_PORT}:8080"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "${HEALTH_URL}"]
+      start_period: 60s
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      disable: false
+    restart: unless-stopped

@@ -1,0 +1,11 @@
+CREATE TABLE usuario_admin (
+   id UUID PRIMARY KEY,
+   nome VARCHAR(100) NOT NULL,
+   username VARCHAR(50) UNIQUE NOT NULL,
+   tentativa_login INTEGER DEFAULT 0,
+   status_usuario VARCHAR(20) DEFAULT 'ATIVO',
+   senha VARCHAR(255) NOT NULL,
+   perfil VARCHAR(50) NOT NULL DEFAULT 'LIDERANCA',
+   criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+
+);

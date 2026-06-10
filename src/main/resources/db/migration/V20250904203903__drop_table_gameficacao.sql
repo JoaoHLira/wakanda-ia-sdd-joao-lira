@@ -1,0 +1,15 @@
+ALTER TABLE IF EXISTS jornada_progresso_wakander DROP CONSTRAINT IF EXISTS fk_jornada_progresso_jornada;
+ALTER TABLE IF EXISTS missao_progresso DROP CONSTRAINT IF EXISTS fk_missao_progresso_missao;
+ALTER TABLE IF EXISTS missao_progresso DROP CONSTRAINT IF EXISTS fk_missao_progresso_tipo;
+ALTER TABLE IF EXISTS missao_wakanda DROP CONSTRAINT IF EXISTS fk_jornada;
+ALTER TABLE IF EXISTS missao_wakanda DROP CONSTRAINT IF EXISTS fk_tipo_missao;
+ALTER TABLE IF EXISTS jornada_wakanda DROP CONSTRAINT IF EXISTS fk_trilha_wakanda;
+ALTER TABLE IF EXISTS progresso_wakander DROP CONSTRAINT IF EXISTS fk_progresso_wakander_wakander;
+DROP TABLE IF EXISTS jornada_progresso_wakander CASCADE;
+DROP TABLE IF EXISTS missao_progresso CASCADE;
+DROP TABLE IF EXISTS missao_wakanda CASCADE;
+DROP TABLE IF EXISTS jornada_wakanda CASCADE;
+DROP TABLE IF EXISTS progresso_wakander CASCADE;
+DROP TABLE IF EXISTS tipo_missao CASCADE;
+DROP TABLE IF EXISTS trilha_wakanda CASCADE;
+DROP TABLE IF EXISTS xp_wakander CASCADE;

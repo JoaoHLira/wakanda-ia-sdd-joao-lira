@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "POST",
+    "urlPathPattern": "/stub/z-api/instances/[^/]+/token/[^/]+/remove-participant",
+    "bodyPatterns": [
+      {
+        "matchesJsonPath": "$"
+      }
+    ]
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "z-api-post-ok-remove-participante-do-grupo.json",
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

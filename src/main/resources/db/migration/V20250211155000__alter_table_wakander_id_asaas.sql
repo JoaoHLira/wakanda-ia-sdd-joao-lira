@@ -1,0 +1,2 @@
+ALTER TABLE wakander
+DROP CONSTRAINT wakander_id_asaas_key;

@@ -1,0 +1,1 @@
+ALTER TABLE wakander ADD COLUMN id_asaas VARCHAR(255) UNIQUE;

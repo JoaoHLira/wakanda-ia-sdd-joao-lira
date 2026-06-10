@@ -1,0 +1,21 @@
+spring:
+  cloud:
+    aws:
+      sqs:
+        endpoint: ${AWS_SQS_LOCAL_ENDPOINT:http://localhost:4566}
+      sns:
+        endpoint: ${AWS_SNS_LOCAL_ENDPOINT:http://localhost:4566}
+
+asaas:
+  url: https://api-sandbox.asaas.com
+  token: ${ASAAS_TOKEN_SANDBOX:123456789}
+
+memberkit:
+  url: http://localhost:8181/stub/memberkit
+  api-key: 123456789
+
+z-api:
+  base-url: http://localhost:8181/stub/z-api
+
+discord:
+  api-url: http://localhost:8181/stub/discord

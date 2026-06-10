@@ -1,0 +1,5 @@
+ALTER TABLE wakander
+ADD COLUMN id_assinatura VARCHAR(255) UNIQUE,
+ADD COLUMN nome_fiador VARCHAR(255),
+ADD COLUMN cpf_fiador VARCHAR(14),
+ADD COLUMN telefone_fiador VARCHAR(20);
