@@ -540,16 +540,66 @@ public class MissaoProgressoApplicationService {
 
 ---
 
-## 11. Conclusão
+## 11. Priorização de gaps derivada do Architecture Haiku
 
-A arquitetura de gamificação está em **bom estado para crescimento horizontal** (novos processadores, novas integrações, novas classes/jornadas). É **frágil para crescimento vertical** quando esse crescimento exige polimorfismo por tipo de missão.
+> Atributos de qualidade priorizados em [`architecture-haiku.md`](architecture-haiku.md):
+> **Extensibilidade (1) > Mantenibilidade (2) > Disponibilidade (3) > Observabilidade (4) > Segurança (5) > Performance (6) > Escalabilidade (7)**.
+>
+> Cada gap recebe um score derivado: prioridade = (atributo comprometido + impacto em [`product-vision-board.md`](product-vision-board.md) + esforço).
 
-**Antes de adicionar a próxima feature complexa de missão**, considere:
-1. Aplicar `@TransactionalEventListener(AFTER_COMMIT)` no `XpPromocaoClasseEvent` (quick win, alta segurança)
-2. Refatorar `TipoMissao` para Strategy Pattern (médio esforço, destrava futuro)
-3. Adicionar verificação de idempotência nos consumers críticos (baixo esforço, evita bugs)
+### Gaps de implementação ranqueados (não-opinião — derivação)
 
-Para features que se encaixam no modelo atual (mais missões padrão, mais classes, mais processadores de integração), **o sistema está pronto** — basta seguir as convenções estabelecidas.
+| # | Gap | Atributo comprometido | Bloqueio em produto (VB) | Esforço | Prioridade |
+|:-:|-----|----------------------|--------------------------|:-------:|:----------:|
+| 1 | **`TipoMissao` como tabela-enum sem polimorfismo** | Extensibilidade (#1) | Bloqueia Fase 2 (novos tipos de missão), bloqueia Diferencial #2 (Clãs com missões customizadas) | Médio | 🔴 **P0 — Crítica** |
+| 2 | **Sem `ValidadorDeMissaoEspontanea` + sem sistema de Créditos** | Extensibilidade (#1) | **Bloqueia 100% do modelo de monetização** (mensalidade + créditos contribuídos). Bloqueia Necessidade #6 ("Ter voz e contribuir") | Alto | 🔴 **P0 — Crítica** |
+| 3 | **Cascata síncrona em `MissaoProgressoApplicationService.concluiMissao()`** | Mantenibilidade (#2) + Disponibilidade (#3) | TX longa quebra ao escalar — limita capacidade de operação com 5h/sem do Vis (R5) | Baixo-Médio | 🟠 **P1 — Alta** |
+| 4 | **`XpPromocaoClasseEvent` síncrono dentro da TX de XP** | Disponibilidade (#3) | Wakander pode perder XP por bug em sistema de classes; viola O3 (dados confiáveis) | Baixo | 🟠 **P1 — Alta** |
+| 5 | **Sem distributed tracing / observabilidade do fluxo 3-4 hops** | Observabilidade (#4) | Bloqueia O3 (coleta de dados) + dificulta debug com Vis limitado a 5h | Médio | 🟠 **P1 — Alta** |
+| 6 | **ACL fraca em Z-API e Discord (DTOs vazam)** | Mantenibilidade (#2) | Mudança em contrato externo cascateia — viola R2 (third-party contract limitado) | Médio | 🟡 **P2 — Média** |
+| 7 | **`@Transactional` inconsistente entre ApplicationServices** | Mantenibilidade (#2) | Comportamento de TX varia, dificulta manutenção | Baixo | 🟡 **P2 — Média** |
+| 8 | **Idempotência ausente em consumers SQS críticos** | Disponibilidade (#3) | Reconsumo pode duplicar `MissaoProgresso`, criar XP fantasma | Baixo | 🟡 **P2 — Média** |
+| 9 | **Sem `XPMinimoPorTipo` em `LiberacaoMissao`** | Funcionalidade (não atributo) | Hierarquia Wakandana funcional incompleta — promoção quantitativa só, não multidimensional | Médio | 🟡 **P2 — Média** |
+| 10 | **Bean Validation (`@NotBlank`/`@NotNull`) no domínio** | Mantenibilidade (#2) | Acoplamento a framework — viola DDD | Muito Baixo | 🟢 **P3 — Higiene** |
+| 11 | **Cache manual com `HashMap`** | Performance (#6) | Volume atual não pressiona | Baixo | 🟢 **P3 — Higiene** |
+| 12 | **AI Coach não implementado** | Diferencial #4 (VB) | Fase 3 do roadmap — sem AI, gamificação é genérica | Alto | 🟠 **P1 — Alta** (estratégico) |
+
+### Sequência sugerida de ataque
+
+**Sprint 0 — Quick wins (baixo esforço, alto valor):**
+- Gap #4 (`@TransactionalEventListener AFTER_COMMIT`) — 1 PR
+- Gap #7 (`@Transactional` padronizado) — 1 PR
+- Gap #10 (remover Bean Validation do domínio) — 1 PR
+
+**Sprint 1 — Desbloqueio do produto (P0):**
+- Gap #1 (`TipoMissao` Strategy) — 3-5 PRs em sequência (interface → migrar tipos existentes → adicionar tipo novo)
+- Gap #2 (Sistema de Créditos) — **decisão arquitetural primeiro**: subdomínio próprio ou parte de XP? (questão aberta no Haiku §"Decisões a tomar")
+
+**Sprint 2 — Confiabilidade (P1):**
+- Gap #3 (Outbox Pattern ou eventos `AFTER_COMMIT` para cascata de `concluiMissao`)
+- Gap #5 (introduzir tracing — OpenTelemetry + AWS X-Ray)
+- Gap #8 (idempotência nos consumers)
+
+**Sprint 3 — Estratégico (P1 estratégico):**
+- Gap #12 (PoC AI Coach com Anthropic — decisão LLM Provider consolidada no Haiku 2026-05-27)
+
+**Sprint 4 — Higiene contínua (P2-P3):**
+- Gaps #6, #9, #11 conforme aparece dor
+
+### Critério pra repriorizar
+
+Cada gap deve poder ser reordenado se:
+- Cresce de prioridade quando bloqueia uma meta do Vision Board (especialmente O1-O4)
+- Cai de prioridade quando o atributo de qualidade dele não dói no momento (ex: performance só importa quando dói)
+- **Trade-off triplo** (UX × Comunidade × Viabilidade) é tiebreaker em casos ambíguos
+
+---
+
+## 12. Conclusão
+
+A arquitetura de gamificação está em **bom estado para crescimento horizontal** (novos processadores, novas integrações, novas classes/jornadas). É **frágil para crescimento vertical** quando esse crescimento exige polimorfismo por tipo de missão e quando precisa suportar o modelo de monetização em créditos.
+
+**Para qualquer próxima feature**, derivar prioridade da tabela §11 + atributos do [`architecture-haiku.md`](architecture-haiku.md) + necessidades do [`product-vision-board.md`](product-vision-board.md). Decisões deixam de ser opinião.
 
 ---
 
