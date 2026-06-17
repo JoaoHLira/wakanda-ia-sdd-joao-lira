@@ -199,9 +199,24 @@ git remote -v          # → git@github.com-personal:tribos-dev/wakanda-ai.git
 
 ---
 
-# SDD Kit (Generic Framework)
+## SDD Kit
 
-Este projeto usa o **SDD Kit** para desenvolvimento orientado a especificações. Os comandos `/sdd.*` estão disponíveis no Claude Code.
+This project uses **SDD Kit** for spec-driven development.
+
+### Spec Language
+All specifications MUST be written in **Portuguese** (`pt`).
+Do not mix languages in specs. Technical terms (API, REST, CRUD) stay in English.
+
+### Quick Reference
+- Framework expert: `Skill("sdd-kit-expert")`
+- Workflow: `/sdd.start` → `/sdd.spec` → `/sdd.plan` → `/sdd.build` → `/sdd.finish`
+- Project conventions: `sdd/PROJECT.md`
+- Discovered patterns: `sdd/PATTERNS.md`
+
+### Rules
+- Never create files under `sdd/specs/`, `sdd/wip/`, or `sdd/features/` manually
+- Always go through the `/sdd.start` workflow
+- Respect the phased workflow — don't skip phases
 
 ## Dicas SDD para este projeto
 
@@ -219,14 +234,5 @@ Este projeto usa o **SDD Kit** para desenvolvimento orientado a especificações
 - Layer 3 — quality gates (JaCoCo ≥ 80%, lint, build Maven)
 
 **Teste de integração**: usar WireMock (já configurado em `docker-compose.dev.yml`) em vez de mocks HTTP. Preferir `@SpringBootTest` com LocalStack para testes de SQS.
-
-**Quando criar uma feature nova:**
-```
-/sdd.start "WAI-XX descricao-da-feature"
-/sdd.spec
-/sdd.plan
-/sdd.build
-/sdd.finish
-```
 
 @sdd-kit/CLAUDE.md
